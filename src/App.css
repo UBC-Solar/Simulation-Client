@@ -1,0 +1,26 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* #mainContainer {
+  background-color: red;
+  width: 100%;
+  height: 800px;
+}
+
+#mapCol{
+  background-color: blue;
+  width: 80%;
+} 
+
+#statCol {
+  width:20%;
+  background-color: blueviolet;
+} */
