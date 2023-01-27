@@ -9,3 +9,11 @@ Python 3.8 or above (https://www.python.org/downloads/)
 Git version control (https://git-scm.com/downloads)
 
 ### Getting Started ###
+
+clone this repository and switch to the electron branch.
+
+```bash
+git clone https://github.com/UBC-Solar/Simulation-Client.git
+
+git checkout electron
+```
