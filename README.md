@@ -8,9 +8,11 @@ Python 3.8 or above (https://www.python.org/downloads/)
 
 Git version control (https://git-scm.com/downloads)
 
+nodejs (https://nodejs.org/en/download/)
+
 ### Getting Started ###
 
-clone this repository and switch to the electron branch.
+Clone this repository and switch to the electron branch.
 
 ```bash
 git clone https://github.com/UBC-Solar/Simulation-Client.git
@@ -18,8 +20,19 @@ git clone https://github.com/UBC-Solar/Simulation-Client.git
 git checkout electron
 ```
 
-install node modules
+Install node modules
 ```bash
 npm install
 ```
+To start the application run the command
 
+```bash
+npm start
+```
+
+
+### General Architechture ###
+
+This application consists of three main parts. The first one is the main process, which handles most of the application's key functionality and passes information between the two subprocesses. The majority of the code for the main process is found /public/electron.js
+
+The second process is the visible renderer. It creates and rendered components. This is where the react.js portion of the applicaiton lives. Data that needs to be displayed in the user interface must be passed to the visible render from the main process. If you aren't familiar with react, read about components here. (https://reactjs.org). The code for the visible renderer process mostly lives in the src folder (primarily /src/App.js).
