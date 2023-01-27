@@ -33,6 +33,12 @@ npm start
 
 ### General Architechture ###
 
-This application consists of three main parts. The first one is the main process, which handles most of the application's key functionality and passes information between the two subprocesses. The majority of the code for the main process is found /public/electron.js
+This application consists of three main parts. The first one is the main process, which sends commands and passes information between the other two subprocesses. 
+The majority of the code for the main process is found /public/electron.js
 
-The second process is the visible renderer. It creates and rendered components. This is where the react.js portion of the applicaiton lives. Data that needs to be displayed in the user interface must be passed to the visible render from the main process. If you aren't familiar with react, read about components here. (https://reactjs.org). The code for the visible renderer process mostly lives in the src folder (primarily /src/App.js).
+The second process is the visible renderer. It creates and rendered components. This is where the react.js portion of the applicaiton lives. Data that needs to be displayed in the user interface must be passed to the visible render from the main process. If you aren't familiar with react, read about components here. (https://reactjs.org). 
+The code for the visible renderer process mostly lives in the src folder (primarily /src/App.js).
+
+The final process is the hidden renderer. When prompted by the main process, it launches a python script using the python-shell node module. It waits for the script to finish computing and returns data to the main process. 
+The hidden process window ( an instance of electron's BrowserWindow ) is created in /public/electron.js. 
+The background_task folder contains html files that are responsible for launching the python scripts loced in the /scripts folder.
