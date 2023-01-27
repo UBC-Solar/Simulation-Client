@@ -17,3 +17,9 @@ git clone https://github.com/UBC-Solar/Simulation-Client.git
 
 git checkout electron
 ```
+
+install node modules
+```bash
+npm install
+```
+
