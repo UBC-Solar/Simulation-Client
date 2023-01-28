@@ -16,7 +16,8 @@
         "react-bootstrap": "^2.7.0",
         "react-dom": "^16.14.0",
         "react-native": "^0.71.1",
-        "react-scripts": "2.1.8"
+        "react-scripts": "2.1.8",
+        "webpack": "^4.28.3"
     },
     "scripts": {
         "react-start": "BROWSER=NONE react-scripts start",
