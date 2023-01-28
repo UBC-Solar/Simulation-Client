@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -42,17 +43,13 @@ class App extends Component {
 		return (
 			<div className="App">
 				<header className="App-header">
-					<div id="mainContainer">
-						<Container id="mainContainer">
-							<Col id="mapCol">
-								Map Row
-								<div>{this.state.number}</div>
-							</Col>
-							<Col id="statCol">
-								Stat Col
-							</Col>
-						</Container>
-					</div>
+					<Container id="mainContainer" fluid>
+						<div>{this.state.number}</div>
+						<Row>
+							<Col md={8} id="mapCol">Map</Col>
+							<Col md={4} id="statCol">Stats</Col>
+						</Row>
+					</Container>
 				</header>
 			</div>
 		);

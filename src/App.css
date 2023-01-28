@@ -9,18 +9,17 @@
   color: white;
 }
 
-/* #mainContainer {
-  background-color: red;
+ #mainContainer {
   width: 100%;
   height: 800px;
 }
 
 #mapCol{
   background-color: blue;
-  width: 80%;
+  height: 800px;
 } 
 
 #statCol {
-  width:20%;
   background-color: blueviolet;
-} */
+  height: 800px;
+}
