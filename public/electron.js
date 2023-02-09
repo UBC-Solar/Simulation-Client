@@ -5,6 +5,8 @@ const url = require('url');
 const { app } = electron;
 const { BrowserWindow } = electron;
 
+const { ipcMain } = require('electron');
+
 let mainWindow;
 
 function createWindow() {
@@ -46,4 +48,17 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+
+// ------------------- event listeners here --------------------
+
+ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
+	/* ---- Code to execute as callback ---- */
+});
+
+// This event listener will listen for data being sent back 
+// from the background renderer process
+ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
+	/* ---- Code to execute as callback ---- */
 });
