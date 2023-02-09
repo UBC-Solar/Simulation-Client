@@ -2,7 +2,24 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
+const electron = window.require('electron');
+const { ipcRenderer } = electron;
+
+
 class App extends Component {
+
+  componentDidMount(){
+
+    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
+			console.log(args);
+		});
+
+    ipcRenderer.send('VISIBLE_START', {
+      number: 100,
+    })
+  }
+
   render (){
     return (
       <div className="App">

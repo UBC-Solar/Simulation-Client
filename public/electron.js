@@ -8,21 +8,30 @@ const { BrowserWindow } = electron;
 let mainWindow;
 
 function createWindow() {
-  const startUrl = process.env.DEV
-    ? 'http://localhost:3000'
-    : url.format({
-        pathname: path.join(__dirname, '/../build/index.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
-  mainWindow = new BrowserWindow();
+	const startUrl = process.env.DEV
+		? 'http://localhost:3000'
+		: url.format({
+				pathname: path.join(__dirname, '/../build/index.html'),
+				protocol: 'file:',
+				slashes: true,
+		  });
+	
+    mainWindow = new BrowserWindow({
+		width: 1000,
+    height: 800,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false,
+    }
+	});
 
-  mainWindow.loadURL(startUrl);
-  process.env.DEV && mainWindow.webContents.openDevTools();
+	mainWindow.loadURL(startUrl);
+	process.env.DEV && mainWindow.webContents.openDevTools();
 
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
+	mainWindow.on('closed', function() {
+		mainWindow = null;
+	});
 }
 
 app.on('ready', createWindow);
