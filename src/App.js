@@ -10,17 +10,19 @@ const { ipcRenderer } = electron;
 class App extends Component {
 
   componentDidMount(){
-
+    // Sets up an event listener which reads 
+    // the data set from background process
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
 		});
 
-    ipcRenderer.send('VISIBLE_START', {
+    // Sends trigger to main to start the background/hidden process
+    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
       number: 100,
     })
   }
 
-  render (){
+  render () {
     return (
       <div className="App">
         <header className="App-header">

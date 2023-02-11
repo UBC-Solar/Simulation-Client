@@ -1,0 +1,28 @@
+<script>
+    const { PythonShell } = requre('python-shell');
+    const { ipcRenderer } = require('electron');
+    const path = require('path');
+
+    // Set up listener for the hidden renderer
+    // This listens for the START_PROCESSING prompt from the main process
+    // and once recieved, sets up and runs a python shell associated with our script
+    ipcRenderer.on('START_PROCESSING', (event,args) => {
+        const { data } = args;
+        // Tie the python shell to our script
+        let pyshell = new PythonShell(path.join(__dirname, '/../scripts/rng.py'), {
+            // This method of entering the python path seems sketchy
+            pythonPath: 'python',
+            args: [data]
+        })
+
+        // Run the python script, send the results to the main renderer
+        pyshell.on('message', function(results) {
+            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+        });
+    });
+
+    // Send a message to the main renderer that the background listener
+    // is ready for data
+    ipcRenderer.send('BACKGROUND_READY');
+
+</script>
