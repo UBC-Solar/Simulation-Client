@@ -72,9 +72,11 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 		slashes: true,
 	});
 	hiddenWindow = new BrowserWindow({
-		show: false,
+		show: true,
 		webPreferences: {
 			nodeIntegration: true,
+			contextIsolation: false,
+			enableRemoteModule: true
 		},
 	});
 	hiddenWindow.loadURL(backgroundFileUrl);

@@ -1,5 +1,5 @@
 <script>
-    const { PythonShell } = requre('python-shell');
+    const { PythonShell } = require('python-shell');
     const { ipcRenderer } = require('electron');
     const path = require('path');
 
@@ -11,7 +11,7 @@
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/rng.py'), {
             // This method of entering the python path seems sketchy
-            pythonPath: 'python',
+            pythonPath: 'python3',
             args: [data]
         })
 
