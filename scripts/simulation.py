@@ -1,4 +1,4 @@
-from simulation.main import ExecuteSimulation
+from Simulation.simulation.main import ExecuteSimulation
 print("hi")
 rawData = ExecuteSimulation.GetSimulationData()
 
