@@ -9,9 +9,9 @@
     ipcRenderer.on('START_PROCESSING', (event,args) => {
         const { data } = args;
         // Tie the python shell to our script
-        let pyshell = new PythonShell(path.join(__dirname, '/../scripts/simulation.py'), {
+        let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
             // This method of entering the python path seems sketchy
-            pythonPath: 'python3',
+            pythonPath: 'python',
             args: [data]
         })
 

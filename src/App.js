@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
