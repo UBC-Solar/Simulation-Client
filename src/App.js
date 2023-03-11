@@ -60,6 +60,9 @@ class NameForm extends React.Component {
 
   handleSubmit(event) {
     console.log("Message from input: " + this.state.value)
+    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
+      number: 100,
+    })
     event.preventDefault();
   }
 
