@@ -8,3 +8,5 @@ print("hi")
 rawData = ex.GetSimulationData()
 
 print(rawData)
+
+print("simulation_run_complete")

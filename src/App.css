@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+/* 
+SIMULATION ARGUMENTS SECTION
+*/
+
+#fireSimButton {
+  width: 150px;
+  height: 50px;
+
+}

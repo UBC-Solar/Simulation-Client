@@ -16,10 +16,19 @@ class App extends Component {
 		});
 
     // Sends trigger to main to start the background/hidden process
+    // ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
+    //   number: 100,
+    // })
+  }
+  
+  startSim() {
+    console.log("STARTING SIMULATION")
     ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-      number: 100,
+      string: "HELLO WORLD",
     })
   }
+ 
+
 
   render () {
     return (
@@ -29,6 +38,7 @@ class App extends Component {
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
+          <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
           <a
             className="App-link"
             href="https://reactjs.org"

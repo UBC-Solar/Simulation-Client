@@ -102,4 +102,6 @@ ipcMain.on('BACKGROUND_READY', (event, args) => {
 	event.reply('START_PROCESSING', {
 		data: cache.data,
 	})
+
 });
+
