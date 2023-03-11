@@ -32,6 +32,7 @@ class App extends Component {
 
           <NameForm></NameForm>
 
+          <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
           <a
             className="App-link"
             href="https://reactjs.org"
