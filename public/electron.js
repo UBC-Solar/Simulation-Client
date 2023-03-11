@@ -94,6 +94,9 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 // from the background renderer process
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
+	if(args.message === "simulation_run_complete") {
+		hiddenWindow.close();
+	}
 });
 
 // This listens for the background renderer to confirm it has been set up
