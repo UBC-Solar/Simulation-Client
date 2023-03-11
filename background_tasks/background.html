@@ -9,7 +9,7 @@
     ipcRenderer.on('START_PROCESSING', (event,args) => {
         const { data } = args;
         // Tie the python shell to our script
-        let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
+        let pyshell = new PythonShell(path.join(__dirname, '/../scripts/test_run.py'), {
             // This method of entering the python path seems sketchy
             pythonPath: 'python',
             args: [data]
@@ -17,7 +17,12 @@
 
         // Run the python script, send the results to the main renderer
         pyshell.on('message', function(results) {
-            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+            if (message=="simulation_run_complete"){
+                pyshell.end();
+            }
+            else{
+                ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+            }
         });
     });
 
