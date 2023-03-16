@@ -18,6 +18,9 @@ class App extends Component {
     // the data set from background process
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
+      if(typeof args.message === 'object'){
+        console.log("OBJECT SPOTTED");
+      }
 		});
   }
   
