@@ -6,6 +6,7 @@ const { app } = electron;
 const { BrowserWindow } = electron;
 
 const { ipcMain } = require('electron');
+const simDataJSON = require('../data.json');
 
 let mainWindow;
 
@@ -35,7 +36,6 @@ function createWindow() {
 		mainWindow = null;
 	});
 }
-
 app.on('ready', createWindow);
 
 // TODO: Temporarily set this to just quit to see if it would work properly with windows
@@ -51,6 +51,11 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+
+
+
+
 
 
 // ------------------- event listeners here --------------------
@@ -93,8 +98,13 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 // This event listener will listen for data being sent back 
 // from the background renderer process
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
+	// parse data output json
+	const json = JSON.parse(JSON.stringify(simDataJSON));
+	console.log("test");
+	console.log(json);
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
 	if(args.message === "simulation_run_complete") {
+		mainWindow.webContents.send('JSON_DATA', json)
 		hiddenWindow.close();
 	}
 });

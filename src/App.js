@@ -11,17 +11,29 @@ const { ipcRenderer } = electron;
 
 
 
+
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      json: {
+        empty: 100,
+      }
+    };
+  }
 
   componentDidMount(){
     // Sets up an event listener which reads 
     // the data set from background process
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
-      if(typeof args.message === 'object'){
-        console.log("OBJECT SPOTTED");
-      }
 		});
+    ipcRenderer.on('JSON_DATA', (event, args) => {
+      this.setState({
+        json: args,
+      })
+    })
   }
   
   startSim() {
@@ -34,11 +46,21 @@ class App extends Component {
 
 
   render () {
+    let returnString = "";
+    if (this.state.json["empty"] === undefined){
+      this.state.json["distances"].forEach(element => {
+        returnString += element + "\n"
+      });
+    } else {
+      returnString = "NO DATA..."
+    }
+    
     return (
       <div className="App">
         <Container fluid id="appContainer">
           <Row>
             <Col id="leftRow">
+              <div>{returnString}</div>
             </Col>
             <Col md={5} id="centerRow">
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>

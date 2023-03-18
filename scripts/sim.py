@@ -54,7 +54,7 @@ json_object = json.dumps(data, indent=4, cls=NpEncoder)
 with open("data.json", "w") as outfile:
     outfile.write(json_object)
 
-# print to console to confirm run is working
+# print to console to confirm end of run
 print("simulation_run_complete")
 
 
