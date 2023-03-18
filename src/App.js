@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Stats from './Subcomponents/Stats.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row, Col, Container} from 'react-bootstrap';
@@ -58,24 +59,12 @@ class App extends Component {
 
 
   render () {
-    let returnString = "";
-    if(this.state.loading){
-      returnString = "simulation running"
-    } else {
-      if (this.state.json["empty"] === undefined){
-        this.state.json["distances"].forEach(element => {
-          returnString += element + "\n"
-        });
-      } else {
-        returnString = "NO DATA..."
-      }
-    }
     return (
       <div className="App">
         <Container fluid id="appContainer">
           <Row>
             <Col id="leftRow">
-              <div>{returnString}</div>
+              <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
             <Col md={5} id="centerRow">
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
