@@ -66,6 +66,7 @@ let hiddenWindow;
 // This listens for the command to start background
 // and starts the background/hidden renderer
 ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
+	console.log("Starting background via main")
 	const backgroundFileUrl = url.format({
 		pathname: path.join(__dirname, '../background_tasks/background.html'),
 		protocol: 'file:',
@@ -94,6 +95,13 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 // from the background renderer process
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
+});
+
+ipcMain.on('MESSAGE_FROM_USER', (event, args) => {
+	mainWindow.webContents.send('MESSAGE_TO_BACKGROUND_FROM_USER', {
+		message: args.message,
+	});
+	console.log("From main process: " + args.message);
 });
 
 // This listens for the background renderer to confirm it has been set up

@@ -15,9 +15,16 @@ class App extends Component {
 			console.log(args);
 		});
 
-    // Sends trigger to main to start the background/hidden process
+    //  Sends trigger to main to start the background/hidden process
+    // ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
+    //   number: 100,
+    // })
+  }
+
+  startSim() {
+    console.log("STARTING SIMULATION")
     ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-      number: 100,
+      string: "HELLO WORLD",
     })
   }
 
@@ -33,6 +40,7 @@ class App extends Component {
           <NameForm></NameForm>
 
           <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
+
           <a
             className="App-link"
             href="https://reactjs.org"
@@ -60,10 +68,11 @@ class NameForm extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log("Message from input: " + this.state.value)
-    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-      number: 100,
-    })
+    console.log("Message from input: " + this.state.value);
+
+    ipcRenderer.send('MESSAGE_FROM_USER', {
+      message: this.state.value,
+    });
     event.preventDefault();
   }
 

@@ -5,10 +5,12 @@ import sys, random
 def rng(x):
     return random.randint(0, x)
 
-# print(rng(int(data)))
-while(1):
-    msg = sys.stdin()
+print("Starting up edited python script")
+
+while(True):
+    print('message received by python script')
+    msg = input("(From py script) Send a message, or done if done")
     if msg.lower()=="done":
-       print("simulation_run_complete") 
+        print("simulation_run_complete") 
     else:
-        print(sys.stdin())
+        print("From python script: " + msg)

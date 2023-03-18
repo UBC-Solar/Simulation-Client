@@ -10,20 +10,27 @@
         const { data } = args;
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/test_run.py'), {
-            // This method of entering the python path seems sketchy
+            // This method of entering the python path seems sketch
             pythonPath: 'python',
             args: [data]
         })
 
         // Run the python script, send the results to the main renderer
         pyshell.on('message', function(results) {
-            if (message=="simulation_run_complete"){
+            if (results=="simulation_run_complete"){
                 pyshell.end();
             }
             else{
+                console.log("(Log in bkgrnd renderer): " + results);
                 ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
             }
         });
+    });
+
+    ipcRenderer.on('MESSAGE_TO_BACKGROUND_FROM_USER', (event,args) => {
+        console.log("received msg from user thru main")
+        console.log(args.message);
+        pyshell.send("Sending to pyshell" + args.message);
     });
 
     // Send a message to the main renderer that the background listener
