@@ -26,12 +26,8 @@ def first_N_Elements(arr, n):
     for i in range(0, n):    
         arr2[i] = arr[i + startIndex]
     return arr2
-    
 
-
-
-
-
+# run simulation 
 rawData = ex.GetSimulationData()
 
 shorter_speed = first_N_Elements(rawData.arrays[0], 1000)
@@ -51,14 +47,14 @@ data = {
     "delta_energy": shorter_DE
 }
 
-# Serializing json
+# Serializing json with NpEncoder
 json_object = json.dumps(data, indent=4, cls=NpEncoder)
 
 # Writing to data.json
 with open("data.json", "w") as outfile:
     outfile.write(json_object)
 
-
+# print to console to confirm run is working
 print("simulation_run_complete")
 
 
