@@ -2,37 +2,33 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* 
+Main Application Styles
+*/
+
+#appContainer {
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#leftRow {
+  background-color: white;
+  height:100vh;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#centerRow {
+  background-color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#rightRow {
+  background-color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 
+SIMULATION ARGUMENTS SECTION
+*/
+
+#fireSimButton {
+  width: 150px;
+  height: 50px;
+
 }

@@ -9,6 +9,7 @@ const { ipcMain, MessageChannelMain } = require('electron');
 
 // Initialize ports for communication b/w hidden and main renderer
 const { port1, port2 } = new MessageChannelMain()
+const simDataJSON = require('../data.json');
 
 let mainWindow;
 
@@ -22,7 +23,7 @@ function createWindow() {
 		  });
 	
     mainWindow = new BrowserWindow({
-		width: 1000,
+		width: 1200,
 		height: 800,
 		webPreferences: {
 			nodeIntegration: true,
@@ -44,7 +45,6 @@ function createWindow() {
 		mainWindow.webContents.postMessage('port', null, [port1])
 	})
 }
-
 app.on('ready', createWindow);
 
 // TODO: Temporarily set this to just quit to see if it would work properly with windows
@@ -108,7 +108,15 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 // This event listener will listen for data being sent back 
 // from the background renderer process
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
+	// parse data output json
+	const json = JSON.parse(JSON.stringify(simDataJSON));
+	console.log("test");
+	console.log(json);
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
+	if(args.message === "simulation_run_complete") {
+		mainWindow.webContents.send('JSON_DATA', json)
+		hiddenWindow.close();
+	}
 });
 
 ipcMain.on('MESSAGE_FROM_USER', (event, args) => {
@@ -124,4 +132,6 @@ ipcMain.on('BACKGROUND_READY', (event, args) => {
 	event.reply('START_PROCESSING', {
 		data: cache.data,
 	})
+
 });
+
