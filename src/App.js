@@ -5,7 +5,6 @@ import './App.css';
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
-
 class App extends Component {
 
   componentDidMount(){
@@ -15,10 +14,14 @@ class App extends Component {
 			console.log(args);
 		});
 
-    //  Sends trigger to main to start the background/hidden process
-    // ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-    //   number: 100,
-    // })
+    ipcRenderer.on('port', e => {
+        // port recieved, make it globally available
+        console.log("vis renderer port end received")
+        window.electronMessagePort = e.ports[0]
+        window.electronMessagePort.onmessage = MessageEvent => {
+            // handle message here
+        }
+    })
   }
 
   startSim() {
@@ -69,10 +72,11 @@ class NameForm extends React.Component {
 
   handleSubmit(event) {
     console.log("Message from input: " + this.state.value);
-
-    ipcRenderer.send('MESSAGE_FROM_USER', {
-      message: this.state.value,
-    });
+    try {
+    window.electronMessagePort.postMessage(this.state.value);
+    } catch (e) {
+      console.log(e)
+    }
     event.preventDefault();
   }
 

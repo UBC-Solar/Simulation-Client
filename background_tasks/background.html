@@ -2,6 +2,7 @@
     const { PythonShell } = require('python-shell');
     const { ipcRenderer } = require('electron');
     const path = require('path');
+    let shell = undefined
 
     // Set up listener for the hidden renderer
     // This listens for the START_PROCESSING prompt from the main process
@@ -14,24 +15,26 @@
             pythonPath: 'python',
             args: [data]
         })
+        shell = pyshell
 
         // Run the python script, send the results to the main renderer
         pyshell.on('message', function(results) {
-            if (results=="simulation_run_complete"){
-                pyshell.end();
-            }
-            else{
                 console.log("(Log in bkgrnd renderer): " + results);
                 ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
-            }
         });
     });
 
-    ipcRenderer.on('MESSAGE_TO_BACKGROUND_FROM_USER', (event,args) => {
-        console.log("received msg from user thru main")
-        console.log(args.message);
-        pyshell.send("Sending to pyshell" + args.message);
-    });
+    ipcRenderer.on('port', e => {
+        // port recieved, make it globally available
+        console.log("Port end recieved, mounting")
+        window.electronMessagePort = e.ports[0]
+        window.electronMessagePort.onmessage = (event) => {
+            // handle message here
+            console.log("received msg from user thru main")
+            console.log(event.data);
+            shell.send(event.data);
+        }
+    })
 
     // Send a message to the main renderer that the background listener
     // is ready for data
