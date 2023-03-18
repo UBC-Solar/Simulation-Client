@@ -17,6 +17,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       json: {
         empty: 100,
       }
@@ -33,13 +34,17 @@ class App extends Component {
       this.setState({
         json: args,
       })
+      this.setState({loading: false})
     })
   }
   
-  startSim() {
+  startSim = () => {
     console.log("STARTING SIMULATION")
     ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
       string: "HELLO WORLD",
+    })
+    this.setState({
+      loading: true,
     })
   }
  
@@ -47,14 +52,17 @@ class App extends Component {
 
   render () {
     let returnString = "";
-    if (this.state.json["empty"] === undefined){
-      this.state.json["distances"].forEach(element => {
-        returnString += element + "\n"
-      });
+    if(this.state.loading){
+      returnString = "simulation running"
     } else {
-      returnString = "NO DATA..."
+      if (this.state.json["empty"] === undefined){
+        this.state.json["distances"].forEach(element => {
+          returnString += element + "\n"
+        });
+      } else {
+        returnString = "NO DATA..."
+      }
     }
-    
     return (
       <div className="App">
         <Container fluid id="appContainer">
