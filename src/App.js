@@ -8,10 +8,6 @@ import {Row, Col, Container} from 'react-bootstrap';
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
-
-
-
-
 class App extends Component {
 
   constructor(props) {
@@ -30,6 +26,17 @@ class App extends Component {
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
 		});
+    
+    ipcRenderer.on('port', e => {
+        // port recieved, make it globally available
+        console.log("vis renderer port end received")
+        window.electronMessagePort = e.ports[0]
+        window.electronMessagePort.onmessage = MessageEvent => {
+            // handle message here
+        }
+    })
+  }
+
     ipcRenderer.on('JSON_DATA', (event, args) => {
       this.setState({
         json: args,
@@ -77,6 +84,41 @@ class App extends Component {
           </Row>
         </Container>
       </div>
+    );
+  }
+}
+
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    console.log("Message from input: " + this.state.value);
+    try {
+    window.electronMessagePort.postMessage(this.state.value);
+    } catch (e) {
+      console.log(e)
+    }
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
     );
   }
 }
