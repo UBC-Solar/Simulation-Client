@@ -6,20 +6,30 @@ class App extends Component {
     }
     
     render() {
-        let returnString = "";
-        if(this.props.loading){
-            returnString = "simulation running"
-        } else {
-            if (this.props.json["empty"] === undefined){
-                returnString += "distance traveled: " + Math.round(this.props.json["distance_travelled"]) + "\n";
-                returnString += "\n" + "time taken: " + Math.round(this.props.json["time_taken"]) + "\n";
-                returnString += "\n" + "final SOC: " + Math.round(this.props.json["final_soc"]) + "\n";
+        let returnString = () => {
+            let loadingString = "simulation running";
+            let emptyString = "NO DATA..."
+            if(this.props.loading){
+                return <div>{loadingString}</div>;
             } else {
-                returnString = "NO DATA..."
+                if (this.props.json["empty"] === undefined){
+                    return(
+                        <ul>
+                            <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"])}</li>
+                            <li>{"time taken: " + Math.round(this.props.json["time_taken"])}</li>
+                            <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>
+                        </ul>   
+                    );
+                } else {
+                    return <div>{emptyString}</div>;
+                }
             }
         }
+        
         return(
-            <div>{returnString}</div>
+            <div>
+                {returnString()}
+            </div>
         );
     }
 }
