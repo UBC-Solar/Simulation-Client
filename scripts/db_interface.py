@@ -1,5 +1,6 @@
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+import json
 
 # <----- InfluxDB constants ----->
 
@@ -20,8 +21,9 @@ class influxHandler:
 
     def get_SoC_data(self):
         self.records = self.query_api.query_stream('from(bucket:"Test") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "state_of_charge")')
+        vals = []
         for record in self.records:
-            print(record["_value"])
+            vals.append(record["_value"])
 
-hd = influxHandler()
-hd.get_SoC_data()
+        json_obj = json.dumps(vals, indent=4)
+        return json_obj

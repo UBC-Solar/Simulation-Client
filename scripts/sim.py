@@ -2,6 +2,7 @@ import sys
 import json
 import numpy as np
 from simulation.main import ExecuteSimulation as ex
+from db_interface import influxHandler
 
 print(f"{sys.path}")
 
@@ -33,6 +34,8 @@ shorter_distance = first_N_Elements(rawData.arrays[1], 1000)
 shorter_SOC = first_N_Elements(rawData.arrays[2], 1000)
 shorter_DE = first_N_Elements(rawData.arrays[3], 1000)
 
+influx_hd = influxHandler()
+influx_data = influx_hd.get_SoC_data()
 
 # Creating dictionary from SimulationResults
 data = {
@@ -42,7 +45,8 @@ data = {
     "speed_kmh": shorter_speed,
     "distances": shorter_distance,
     "state_of_charge": shorter_SOC,
-    "delta_energy": shorter_DE
+    "delta_energy": shorter_DE,
+    "influx_soc": influx_data
 }
 
 # Serializing json with NpEncoder
