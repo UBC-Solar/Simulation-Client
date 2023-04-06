@@ -5,7 +5,6 @@ from simulation.main import ExecuteSimulation as ex
 
 print(f"{sys.path}")
 
-
 # numpy encoder
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -16,7 +15,6 @@ class NpEncoder(json.JSONEncoder):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
-
 
 
 # shortens arrays from simulation output  
@@ -56,5 +54,3 @@ with open("data.json", "w") as outfile:
 
 # print to console to confirm end of run
 print("simulation_run_complete")
-
-
