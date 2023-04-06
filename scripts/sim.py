@@ -20,6 +20,7 @@ class NpEncoder(json.JSONEncoder):
 
 
 # shortens arrays from simulation output  
+# must take elements from middle of array because otherwise values of interest area all zero
 def first_N_Elements(arr, n):
     startIndex = 10000
     arr2 = np.zeros(n)
@@ -30,10 +31,10 @@ def first_N_Elements(arr, n):
 # run simulation 
 rawData = ex.GetSimulationData()
 
-shorter_speed = first_N_Elements(rawData.arrays[0], 1000)
-shorter_distance = first_N_Elements(rawData.arrays[1], 1000)
-shorter_SOC = first_N_Elements(rawData.arrays[2], 1000)
-shorter_DE = first_N_Elements(rawData.arrays[3], 1000)
+shorter_speed = first_N_Elements(rawData.arrays[0], 10000)
+shorter_distance = first_N_Elements(rawData.arrays[1], 10000)
+shorter_SOC = first_N_Elements(rawData.arrays[2], 10000)
+shorter_DE = first_N_Elements(rawData.arrays[3], 10000)
 
 
 # Creating dictionary from SimulationResults
