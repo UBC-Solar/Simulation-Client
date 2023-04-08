@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
+import '../App.css';
+
 class Stats extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +14,7 @@ class Stats extends Component {
         })
         return (
             <div>
-                {arrayName}
+                <div className="graphTitle">{arrayName}</div>
                 <LineChart width={400} height={400} data={graphable_array}>
                     <Line type="monotone" dataKey="value" stroke="#8884d8" label={arrayName} />
                     <CartesianGrid stroke="#ccc" />
@@ -33,7 +35,7 @@ class Stats extends Component {
                 if (this.props.json["empty"] === undefined){
                     return(
                         <div>
-                            <ul>
+                            <ul className="statUL">
                                 <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"])}</li>
                                 <li>{"time taken: " + Math.round(this.props.json["time_taken"])}</li>
                                 <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>

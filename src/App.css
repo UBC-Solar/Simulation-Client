@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: "Lucida Console", "Helvetica", sans-serif;
 }
 
 
@@ -31,4 +32,30 @@ SIMULATION ARGUMENTS SECTION
   width: 150px;
   height: 50px;
 
+}
+
+
+/* 
+Stat Bar Styles
+*/
+
+.statUL {
+  list-style-type: none;
+  padding: 20px;
+}
+
+.statUL li {
+  outline-style: solid;
+  margin: 10px;
+  margin-left: 0px;
+  padding: 15px;
+  padding-left: 0px;
+  background: #f3f2f2;
+  font-size: 15px;
+
+}
+
+.graphTitle {
+  font-weight: bold;
+  font-size: 20px;
 }
