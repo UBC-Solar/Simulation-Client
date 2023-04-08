@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-class App extends Component {
+class Stats extends Component {
     constructor(props) {
         super(props);
     }
@@ -59,4 +59,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default Stats;
