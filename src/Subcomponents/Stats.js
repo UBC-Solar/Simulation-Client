@@ -11,15 +11,18 @@ class App extends Component {
             return {"value": element};
         })
         return (
-            <LineChart width={400} height={400} data={graphable_array}>
-                <Line type="monotone" dataKey="value" stroke="#8884d8" label={arrayName} />
-                <CartesianGrid stroke="#ccc" />
-                <XAxis />
-                <YAxis />
-            </LineChart>
+            <div>
+                {arrayName}
+                <LineChart width={400} height={400} data={graphable_array}>
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" label={arrayName} />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis />
+                    <YAxis />
+                </LineChart>
+            </div>
         );  
     }
-    
+
     render() {
         let returnString = () => {
             let loadingString = "simulation running";
@@ -37,6 +40,7 @@ class App extends Component {
                                 <li>{this.createGraph("speed_kmh")}</li>
                                 <li>{this.createGraph("distances")}</li>
                                 <li>{this.createGraph("state_of_charge")}</li>
+                                <li>{this.createGraph("influx_soc")}</li>
                             </ul>
 
                         </div>

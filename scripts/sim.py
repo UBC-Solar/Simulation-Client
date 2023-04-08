@@ -36,7 +36,8 @@ shorter_SOC = first_N_Elements(rawData.arrays[2], 10000)
 shorter_DE = first_N_Elements(rawData.arrays[3], 10000)
 
 influx_hd = influxHandler()
-influx_data = influx_hd.get_SoC_data()
+influx_data = json.loads(influx_hd.get_SoC_data())
+
 
 # Creating dictionary from SimulationResults
 data = {
