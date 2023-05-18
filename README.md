@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Simulation-Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the front-end side of the simulation application. The goal of this application is to display simulation outputs while allowing users to dynamically control input parameters. This application is currently a work in progress, but we envision the final product will interface with a database that contains information from the car's onboard telemetry system. This will allow our model to predict race conditions using real-time data. This application is built using a combination of Electron, React, and simple python scripts.
 
-## Available Scripts
+### Prerequisites ###
 
-In the project directory, you can run:
+Python 3.8 or above (https://www.python.org/downloads/)
 
-### `npm start`
+Git version control (https://git-scm.com/downloads)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+nodejs (https://nodejs.org/en/download/)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Getting Started ###
 
-### `npm test`
+Clone this repository.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/UBC-Solar/Simulation-Client.git
+```
 
-### `npm run build`
+Install node modules
+```bash
+npm install
+```
+To start the application run the command
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
+This command should trigger an electron window to open with the application running. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### General Architechture ###
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Architechture](./images/image.png)
 
-### `npm run eject`
+This application consists of three main parts. The first one is the main process, which sends commands and passes information between the other two subprocesses. Information is passed to and from the main process using electron's messaging ports called IPC channels. More information here ( https://www.electronjs.org/docs/latest/tutorial/ipc ).
+The majority of the code for the main process is found in /public/electron.js
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The second process is the visible renderer. It creates and renders React components, thus containing the UI elements that the user interacts with. This is where the React portion of the applicaiton lives. Data required by UI elements must be passed to the visible render from the main process. Additionally, modular simluation parameters can be changed using UI components, and this information is passed back to the main process to be inputted into the simulation. If you aren't familiar with React, read about components here ( https://reactjs.org ). 
+The code for the visible renderer process is mostly in /src/App.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The final process is the hidden renderer. When prompted by the main process, it launches a python script using the python-shell node module, and passes simulation output data to the main process upon completion. 
+The hidden process window ( an instance of electron's BrowserWindow ) is created in /public/electron.js. 
+The /background_task folder contains html files that launch the python scripts.
+Python scripts, which import the simulation pip package, are located in the /scripts folder.
