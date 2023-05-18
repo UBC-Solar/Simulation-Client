@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis,ReferenceArea } from 'recharts';
+import ZoomChart from './ZoomChart'
 
 import '../App.css';
 
@@ -9,20 +10,9 @@ class Stats extends Component {
     }
 
     createGraph(arrayName) {
-        const graphable_array = this.props.json[arrayName].map((element, key) => {
-            return {"value": element};
-        })
-        return (
-            <div>
-                <div className="graphTitle">{arrayName}</div>
-                <LineChart width={400} height={400} data={graphable_array}>
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" label={arrayName} />
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis />
-                    <YAxis />
-                </LineChart>
-            </div>
-        );  
+        return(
+            <ZoomChart name={arrayName} json={this.props.json}/>  
+        )
     }
 
     render() {

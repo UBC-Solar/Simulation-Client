@@ -12,7 +12,7 @@ Main Application Styles
 }
 
 #leftRow {
-  background-color: white;
+  background-color:  #f3f2f2;
   height:100vh;
 }
 
@@ -50,8 +50,8 @@ Stat Bar Styles
   margin-left: 0px;
   padding: 15px;
   padding-left: 0px;
-  background: #f3f2f2;
   font-size: 15px;
+  background: white;
 
 }
 
