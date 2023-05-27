@@ -1,150 +1,140 @@
-import React, { Component } from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis,ReferenceArea } from 'recharts';
+
+import React, { useState } from "react";
+import { LineChart, Line, ReferenceArea, XAxis, YAxis } from "recharts";
+
+import '../App.css';
 
 
-const initialState = {
-    data: this.props.json[this.props.name],
-    left: "dataMin",
-    right: "dataMax",
-    refAreaLeft: "",
-    refAreaRight: "",
-    top: "dataMax+1",
-    bottom: "dataMin-1",
-    top2: "dataMax+20",
-    bottom2: "dataMin-20",
-    animation: true
-};
+const MIN_ZOOM = 5; // adjust based on your data
+const DEFAULT_ZOOM = { x1: null, y1: null, x2: null, y2: null };
+const CHART_WIDTH = 300;
 
-class ZoomChart extends Component {
-    constructor(props) {
-        super(props);
-        this.state = initialState;
-    }
-    getAxisYDomain = (from, to, ref, offset) => {
-        const refData = this.state.data.slice(from - 1, to);
-        let [bottom, top] = [refData[0][ref], refData[0][ref]];
-        refData.forEach(d => {
-            if (d[ref] > top) top = d[ref];
-            if (d[ref] < bottom) bottom = d[ref];
-        });
-      
-        return [(bottom | 0) - offset, (top | 0) + offset];
-    };
 
-    zoom() {
-        let { refAreaLeft, refAreaRight, data } = this.state;
-
-        if (refAreaLeft === refAreaRight || refAreaRight === "") {
-            this.setState(() => ({
-                refAreaLeft: "",
-                refAreaRight: ""
-            }));
-            return;
-        }
-    
-        // xAxis domain
-        if (refAreaLeft > refAreaRight)
-            [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
-    
-        // yAxis domain
-        const [bottom, top] = getAxisYDomain(refAreaLeft, refAreaRight, "cost", 1);
-        const [bottom2, top2] = getAxisYDomain(
-            refAreaLeft,
-            refAreaRight,
-            "impression",
-            50
-        );
-    
-        this.setState(() => ({
-            refAreaLeft: "",
-            refAreaRight: "",
-            data: data.slice(),
-            left: refAreaLeft,
-            right: refAreaRight,
-            bottom,
-            top,
-            bottom2,
-            top2
-        }));
-    }
-    
-    zoomOut() {
-        this.setState(({ data }) => ({
-            data: data.slice(),
-            refAreaLeft: "",
-            refAreaRight: "",
-            left: "dataMin",
-            right: "dataMax",
-            top: "dataMax+1",
-            top2: "dataMax+50",
-            bottom: "dataMin"
-        }));
-    }
-    
-    render(){
-        const {
-            data,
-            left,
-            right,
-            refAreaLeft,
-            refAreaRight,
-            top,
-            bottom,
-            top2,
-            bottom2
-          } = this.state;
-
-        const graphable_array = this.props.json[arrayName].map((element, key) => {
-            return {"value": element};
-        })
-        return (
-            <div>
-                <div className="graphTitle">{arrayName}</div>
-                <button className="btn update" onClick={this.zoomOut.bind(this)}>
-                    Zoom Out
-                </button>
-                <LineChart
-                    width={400}
-                    height={400}
-                    data={graphable_array}
-                    onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel })}
-                    onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel })}
-                    onMouseUp={this.zoom.bind(this)}
-                 >
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis
-                        allowDataOverflow={true}
-                        domain={[left, right]}
-                        type="number"
-                    />
-                    <YAxis
-                        allowDataOverflow={true}
-                        domain={[bottom, top]}
-                        type="number"
-                        yAxisId="1"
-                    />
-
-                    <Line
-                        yAxisId="1"
-                        type="natural"
-                        dataKey="value"
-                        stroke="#8884d8"
-                        animationDuration={300}
-                    />
-
-                    {
-                        refAreaLeft && refAreaRight ? (
-                        <ReferenceArea
-                            yAxisId="1"
-                            x1={refAreaLeft}
-                            x2={refAreaRight}
-                            strokeOpacity={0.3}
-                        />) : null
-                    }
-                </LineChart>
-            </div>
-        );
-    }
+const Normalize = (min, max, dataset) => {
+  const range = max.x - min.x;
+  const newData = dataset.map((element) => {
+    let val = (element.x - min.x) / range;
+    return ({
+      x: element.x,
+      y: element.y,
+      norm: val * CHART_WIDTH,
+    });
+  });
+  return newData;
 }
 
-export default Stats;
+
+export default function ZoomChart(props) {
+    const raw = props.json[props.name];
+    const data = raw.map((element, key) => {
+        return(
+            {
+                x: key,
+                y: element,
+            }
+        )
+    });
+
+  // data currently on the plot
+  const [filteredData, setFilteredData] = useState(data);
+  // zoom coordinates
+  const [zoomArea, setZoomArea] = useState(DEFAULT_ZOOM);
+  // flag if currently zooming (press and drag)
+  const [isZooming, setIsZooming] = useState(false);
+  // flag if zoomed in
+  const isZoomed = (filteredData?.length !== data?.length);
+
+  // flag to show the zooming area (ReferenceArea)
+  const showZoomBox = isZooming
+
+  // reset the states on zoom out
+  function handleZoomOut() {
+    setFilteredData(data);
+    setZoomArea(DEFAULT_ZOOM);
+  }
+
+  /**
+   * Two possible events:
+   * 1. Clicking on a dot(data point) to select
+   * 2. Clicking on the plot to start zooming
+   */
+  function handleMouseDown(e) {
+    setIsZooming(true);
+    const { chartX, chartY } = e || {};
+
+    setZoomArea({ x1: chartX, y1: chartY, x2: chartX, y2: chartY });
+    console.log(zoomArea);
+  }
+
+  // Update zoom end coordinates
+  function handleMouseMove(e) {
+    if (isZooming) {
+      setZoomArea((prev) => ({ ...prev, x2: e?.chartX, y2: e?.chartY }));
+    }
+    
+  }
+
+  // When zooming stops, update with filtered data points
+  // Ignore if not enough zoom
+  function handleMouseUp(e) {
+    if (isZooming) {
+      setIsZooming(false);
+      let { x1, y1, x2, y2 } = zoomArea;
+
+      // ensure x1 <= x2 and y1 <= y2
+      if (x1 > x2) [x1, x2] = [x2, x1];
+      if (y1 > y2) [y1, y2] = [y2, y1];
+
+      if (x2 - x1 < MIN_ZOOM || y2 - y1 < MIN_ZOOM) {
+        // console.log("zoom cancel");
+      } else {
+        // console.log("zoom stop");
+        const norm = Normalize(filteredData[0], filteredData[filteredData.length-1], filteredData) 
+        const dataPointsInRange = norm.filter(
+          (d) => (d.norm) >= (x1) && (d.norm) <= (x2)
+        );
+        setFilteredData(dataPointsInRange);
+        setZoomArea(DEFAULT_ZOOM);
+      }
+    }
+  }
+
+  return (
+    <div className="plot-container">
+      {isZoomed && <button className="chartButton" onClick={handleZoomOut}>Zoom Out</button>}
+      <LineChart
+        width={CHART_WIDTH}
+        height={CHART_WIDTH}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        data={filteredData}
+      >
+        <XAxis
+          type="number"
+          dataKey="x"
+          domain={["dataMin - 20", "dataMax + 20"]}
+        />
+        <YAxis
+          type="number"
+          dataKey="y"
+          domain={["dataMin - 50", "dataMax + 50"]}
+        />
+        {showZoomBox && (
+          <ReferenceArea
+            x1={zoomArea?.x1}
+            x2={zoomArea?.x2}
+            y1={zoomArea?.y1}
+            y2={zoomArea?.y2}
+          />
+        )}
+        <Line 
+            dataKey='y'
+            stroke="#8884d8"
+            animationDuration={300}
+        />
+
+      </LineChart>
+    </div>
+  );
+}

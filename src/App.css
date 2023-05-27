@@ -59,3 +59,27 @@ Stat Bar Styles
   font-weight: bold;
   font-size: 20px;
 }
+
+
+/* Rechart Styling */
+.recharts-wrapper {
+  cursor: crosshair !important;
+}
+
+.recharts-scatter-symbol {
+  cursor: pointer;
+}
+
+.recharts-cartesian-axis-tick {
+  user-select: none;
+}
+
+.plot-container {
+  position: relative;
+}
+
+.chartButton {
+  position: absolute;
+  left: 200px;
+  z-index: 1;
+}
