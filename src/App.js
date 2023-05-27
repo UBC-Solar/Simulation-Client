@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Stats from './Subcomponents/Stats.js'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Row, Col, Container} from 'react-bootstrap';
+
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
-
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      json: {
+        empty: 100,
+      }
+    };
+  }
 
   componentDidMount(){
     // Sets up an event listener which reads 
@@ -14,30 +27,49 @@ class App extends Component {
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
 		});
-
-    // Sends trigger to main to start the background/hidden process
-    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-      number: 100,
+    
+    // ipcRenderer.on('port', e => {
+    //     // port recieved, make it globally available
+    //     console.log("vis renderer port end received")
+    //     window.electronMessagePort = e.ports[0]
+    //     window.electronMessagePort.onmessage = MessageEvent => {
+    //         // handle message here
+    //     }
+    // })
+    ipcRenderer.on('JSON_DATA', (event, args) => {
+      this.setState({
+        json: args,
+      })
+      this.setState({loading: false})
     })
   }
+  
+  startSim = () => {
+    console.log("STARTING SIMULATION")
+    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
+      string: "HELLO WORLD",
+    })
+    this.setState({
+      loading: true,
+    })
+  }
+ 
+
 
   render () {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Container fluid id="appContainer">
+          <Row>
+            <Col id="leftRow">
+              <Stats loading={this.state.loading} json={this.state.json}/>
+            </Col>
+            <Col md={5} id="centerRow">
+              <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
+            </Col>
+            <Col id="rightRow"></Col>
+          </Row>
+        </Container>
       </div>
     );
   }

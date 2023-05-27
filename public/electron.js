@@ -5,7 +5,11 @@ const url = require('url');
 const { app } = electron;
 const { BrowserWindow } = electron;
 
-const { ipcMain } = require('electron');
+const { ipcMain, MessageChannelMain } = require('electron');
+
+// Initialize ports for communication b/w hidden and main renderer
+const { port1, port2 } = new MessageChannelMain()
+const simDataJSON = require('../data.json');
 
 let mainWindow;
 
@@ -19,7 +23,7 @@ function createWindow() {
 		  });
 	
     mainWindow = new BrowserWindow({
-		width: 1000,
+		width: 1200,
 		height: 800,
 		webPreferences: {
 			nodeIntegration: true,
@@ -34,8 +38,13 @@ function createWindow() {
 	mainWindow.on('closed', function() {
 		mainWindow = null;
 	});
-}
 
+	// Once window is ready - hand it the associated port
+	mainWindow.once('ready-to-show', () => {
+		console.log("Sending port to visible renderer from main")
+		mainWindow.webContents.postMessage('port', null, [port1])
+	})
+}
 app.on('ready', createWindow);
 
 // TODO: Temporarily set this to just quit to see if it would work properly with windows
@@ -52,7 +61,6 @@ app.on('activate', () => {
   }
 });
 
-
 // ------------------- event listeners here --------------------
 
 // tmp variable to store data until background is ready to process
@@ -66,6 +74,7 @@ let hiddenWindow;
 // This listens for the command to start background
 // and starts the background/hidden renderer
 ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
+	console.log("Starting background via main")
 	const backgroundFileUrl = url.format({
 		pathname: path.join(__dirname, '../background_tasks/background.html'),
 		protocol: 'file:',
@@ -88,12 +97,33 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 	});
 
 	cache.data = args.number;
+
+	// Once window is ready - hand it the associated port
+	hiddenWindow.once('ready-to-show', () => {
+		console.log("Sending port to hidden window from main")
+		hiddenWindow.webContents.postMessage('port', null, [port2])
+	})
 });
 
 // This event listener will listen for data being sent back 
 // from the background renderer process
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
+	// parse data output json
+	const json = JSON.parse(JSON.stringify(simDataJSON));
+	console.log("test");
+	console.log(json);
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
+	if(args.message === "simulation_run_complete") {
+		mainWindow.webContents.send('JSON_DATA', json)
+		hiddenWindow.close();
+	}
+});
+
+ipcMain.on('MESSAGE_FROM_USER', (event, args) => {
+	mainWindow.webContents.send('MESSAGE_TO_BACKGROUND_FROM_USER', {
+		message: args.message,
+	});
+	console.log("From main process: " + args.message);
 });
 
 // This listens for the background renderer to confirm it has been set up
@@ -102,4 +132,6 @@ ipcMain.on('BACKGROUND_READY', (event, args) => {
 	event.reply('START_PROCESSING', {
 		data: cache.data,
 	})
+
 });
+

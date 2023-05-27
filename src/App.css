@@ -1,38 +1,61 @@
 .App {
   text-align: center;
+  font-family: "Lucida Console", "Helvetica", sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* 
+Main Application Styles
+*/
+
+#appContainer {
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#leftRow {
+  background-color: white;
+  height:100vh;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#centerRow {
+  background-color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#rightRow {
+  background-color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 
+SIMULATION ARGUMENTS SECTION
+*/
+
+#fireSimButton {
+  width: 150px;
+  height: 50px;
+
+}
+
+
+/* 
+Stat Bar Styles
+*/
+
+.statUL {
+  list-style-type: none;
+  padding: 20px;
+}
+
+.statUL li {
+  outline-style: solid;
+  margin: 10px;
+  margin-left: 0px;
+  padding: 15px;
+  padding-left: 0px;
+  background: #f3f2f2;
+  font-size: 15px;
+
+}
+
+.graphTitle {
+  font-weight: bold;
+  font-size: 20px;
 }

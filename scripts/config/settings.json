@@ -1,0 +1,12 @@
+// For now will leave this blank
+// However may be good to have hold our main function settings
+{
+    "influxDB":
+        {
+        "host": "http://143.198.12.56",
+        "port": 8086,
+        "username": "viewer",
+        "password": "viewerpass",
+        "database": "test" 
+        }
+}
