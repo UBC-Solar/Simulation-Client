@@ -5,10 +5,6 @@ import ZoomChart from './ZoomChart'
 import '../App.css';
 
 class Stats extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     createGraph(arrayName) {
         return(
             <ZoomChart name={arrayName} json={this.props.json}/>  
@@ -24,7 +20,7 @@ class Stats extends Component {
             } else {
                 if (this.props.json["empty"] === undefined){
                     return(
-                        <div>
+                        <div id="statDiv">
                             <ul className="statUL">
                                 <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"])}</li>
                                 <li>{"time taken: " + Math.round(this.props.json["time_taken"])}</li>

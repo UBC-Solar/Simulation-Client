@@ -8,12 +8,12 @@
 Main Application Styles
 */
 
-#appContainer {
-}
 
 #leftRow {
   background-color:  #f3f2f2;
   height:100vh;
+  width: 500px;
+  overflow-y: scroll;
 }
 
 #centerRow {
@@ -60,6 +60,11 @@ Stat Bar Styles
   font-size: 20px;
 }
 
+#statDiv {
+  width: 500px;
+  overflow: scroll;
+}
+
 
 /* Rechart Styling */
 .recharts-wrapper {
@@ -75,11 +80,11 @@ Stat Bar Styles
 }
 
 .plot-container {
-  position: relative;
+  /* position: relative; */
 }
 
 .chartButton {
-  position: absolute;
+  /* position: absolute; */
   left: 200px;
   z-index: 1;
 }

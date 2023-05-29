@@ -7,7 +7,7 @@ import '../App.css';
 
 const MIN_ZOOM = 5; // adjust based on your data
 const DEFAULT_ZOOM = { x1: null, y1: null, x2: null, y2: null };
-const CHART_WIDTH = 300;
+const CHART_WIDTH = 450;
 
 
 const Normalize = (min, max, dataset) => {
@@ -29,8 +29,8 @@ export default function ZoomChart(props) {
     const data = raw.map((element, key) => {
         return(
             {
-                x: key,
-                y: element,
+              x: key,
+              y: element,
             }
         )
     });
@@ -44,8 +44,6 @@ export default function ZoomChart(props) {
   // flag if zoomed in
   const isZoomed = (filteredData?.length !== data?.length);
 
-  // flag to show the zooming area (ReferenceArea)
-  const showZoomBox = isZooming
 
   // reset the states on zoom out
   function handleZoomOut() {
@@ -63,7 +61,6 @@ export default function ZoomChart(props) {
     const { chartX, chartY } = e || {};
 
     setZoomArea({ x1: chartX, y1: chartY, x2: chartX, y2: chartY });
-    console.log(zoomArea);
   }
 
   // Update zoom end coordinates
@@ -91,7 +88,7 @@ export default function ZoomChart(props) {
         // console.log("zoom stop");
         const norm = Normalize(filteredData[0], filteredData[filteredData.length-1], filteredData) 
         const dataPointsInRange = norm.filter(
-          (d) => (d.norm) >= (x1) && (d.norm) <= (x2)
+          (d) => (d.norm) >= (x1 - CHART_WIDTH/9) && (d.norm) <= (x2 - CHART_WIDTH/12)
         );
         setFilteredData(dataPointsInRange);
         setZoomArea(DEFAULT_ZOOM);
@@ -120,14 +117,6 @@ export default function ZoomChart(props) {
           dataKey="y"
           domain={["dataMin - 50", "dataMax + 50"]}
         />
-        {showZoomBox && (
-          <ReferenceArea
-            x1={zoomArea?.x1}
-            x2={zoomArea?.x2}
-            y1={zoomArea?.y1}
-            y2={zoomArea?.y2}
-          />
-        )}
         <Line 
             dataKey='y'
             stroke="#8884d8"

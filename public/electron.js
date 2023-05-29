@@ -49,7 +49,6 @@ app.on('ready', createWindow);
 
 // TODO: Temporarily set this to just quit to see if it would work properly with windows
 app.on('window-all-closed', () => {
-	app.quit
   // if (process.platform !== 'darwin') {
   //  app.quit();
   //}
