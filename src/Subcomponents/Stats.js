@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis,ReferenceArea } from 'recharts';
 import ZoomChart from './ZoomChart'
 
 import '../App.css';
