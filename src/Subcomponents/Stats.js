@@ -18,6 +18,8 @@ class Stats extends Component {
                 return <div>{loadingString}</div>;
             } else {
                 if (this.props.json["empty"] === undefined){
+                    console.log("TESTNG TESTING")
+                    console.log(this.props.json)
                     return(
                         <div id="statDiv">
                             <ul className="statUL">

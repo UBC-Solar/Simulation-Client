@@ -60,10 +60,7 @@ Stat Bar Styles
   font-size: 20px;
 }
 
-#statDiv {
-  width: 500px;
-  overflow: scroll;
-}
+
 
 
 /* Rechart Styling */
