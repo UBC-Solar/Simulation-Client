@@ -67,13 +67,13 @@ class App extends Component {
       <div className="App">
         <Container fluid id="appContainer">
           <Row id='appRow'>
-            <Col id="leftRow">
+            <Col id="leftRow" md={5}>
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
             <Col id="centerRow">
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
             </Col>
-            <Col id="rightRow">
+            <Col id="rightRow" md={6}>
               <Map display={this.state.display} coordinates={this.state.json['GIS_coordinates']} />
             </Col>
           </Row>

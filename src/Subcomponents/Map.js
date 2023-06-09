@@ -1,5 +1,5 @@
 import React from "react";
-import { MapContainer, TileLayer, useMap, Popup, Marker} from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Popup, Marker, Polyline} from 'react-leaflet';
 
 
 import 'leaflet/dist/leaflet.css';
@@ -20,7 +20,7 @@ L.Icon.Default.mergeOptions({
 
 export default function Map(props) {
   // constant controls how many waypoints are generated. Larger number = less waypoints
-  const DIV = 20;
+  const DIV = 10;
 
   let coordinates = props.coordinates;
 
@@ -38,6 +38,7 @@ export default function Map(props) {
     
   if(coordinates) {
     const coords = coordinates.filter((el, n) => n % DIV === 0);
+    const blackOptions = { color: 'blue' }
     return (
         // Important! Always set the container height explicitly
         <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={6} scrollWheelZoom={false}>
@@ -45,6 +46,7 @@ export default function Map(props) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <Polyline pathOptions={blackOptions} positions={coords} />
           {GenerateMarkers(coords)}
         </MapContainer>
       );

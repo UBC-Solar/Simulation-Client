@@ -25,7 +25,6 @@ Main Application Styles
 
 #rightRow {
   background-color: #f3f2f2;
-  width: 800px;
   padding: 0px;
 }
 
@@ -97,5 +96,6 @@ Stat Bar Styles
 
 #MapCont {
   height: 100vh;
+  width: 100%;
 }
 
