@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Stats from './Subcomponents/Stats.js'
+import Map from './Subcomponents/Map.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row, Col, Container} from 'react-bootstrap';
@@ -15,6 +16,7 @@ class App extends Component {
     super(props);
     this.state = {
       loading: false,
+      diplayMap: false,
       json: {
         empty: 100,
       }
@@ -41,6 +43,7 @@ class App extends Component {
         json: args,
       })
       this.setState({loading: false})
+      this.setState({displayMap: true})
     })
   }
   
@@ -64,10 +67,12 @@ class App extends Component {
             <Col id="leftRow" md={5}>
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
-            <Col id="centerRow" md={4}>
+            <Col id="centerRow" md={2}>
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
             </Col>
-            <Col id="rightRow" md={3}></Col>
+            <Col id="rightRow" md={5}>
+              <Map display={this.state.display} coordinates={this.state.json['GIS_coordinates']} />
+            </Col>
           </Row>
         </Container>
       </div>
