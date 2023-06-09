@@ -12,15 +12,15 @@ L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('../Images/blueCircle.png'),
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-    iconSize: new L.Point(9, 9),
+    iconSize: new L.Point(10, 10),
     shadowSize: new L.Point(0,0),
-    iconAnchor: new L.Point(9, 9),
+    iconAnchor: new L.Point(10, 10),
 });
 
 
 export default function Map(props) {
   // constant controls how many waypoints are generated. Larger number = less waypoints
-  const DIV = 10;
+  const DIV = 15;
 
   let coordinates = props.coordinates;
 
@@ -38,7 +38,7 @@ export default function Map(props) {
     
   if(coordinates) {
     const coords = coordinates.filter((el, n) => n % DIV === 0);
-    const blackOptions = { color: 'blue' }
+    const blackOptions = { color: '#085cb4' }
     return (
         // Important! Always set the container height explicitly
         <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={6} scrollWheelZoom={false}>
