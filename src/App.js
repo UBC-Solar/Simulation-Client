@@ -22,7 +22,7 @@ class App extends Component {
       json: {
         empty: 100,
       },
-      granularity: 15,
+      granularity: 90,
     };
   }
 
@@ -80,7 +80,7 @@ class App extends Component {
                 min={10}
                 max={90}
                 step={10}
-                defaultValue={this.granularity}
+                defaultValue={this.state.granularity}
                 onChangeCommitted={(e, val) => this.setState({granularity: val})}
                 valueLabelDisplay="auto"
               />
