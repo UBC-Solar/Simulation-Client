@@ -14,6 +14,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     iconSize: new L.Point(9, 9),
     shadowSize: new L.Point(0,0),
+    iconAnchor: new L.Point(9, 9),
 });
 
 
