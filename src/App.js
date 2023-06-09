@@ -77,11 +77,11 @@ class App extends Component {
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
               <Slider 
                 marks={true}
-                min={15}
+                min={10}
                 max={90}
-                step={15}
+                step={10}
                 defaultValue={this.granularity}
-                onChange={(e) => this.setState({granularity: e.target.value})}
+                onChangeCommitted={(e, val) => this.setState({granularity: val})}
                 valueLabelDisplay="auto"
               />
             </Col>

@@ -41,7 +41,7 @@ export default function Map(props) {
     const blackOptions = { color: '#085cb4' }
     return (
         // Important! Always set the container height explicitly
-        <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={6} scrollWheelZoom={false}>
+        <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={8} scrollWheelZoom={false}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
