@@ -42,8 +42,10 @@ class App extends Component {
       this.setState({
         json: args,
       })
-      this.setState({loading: false})
-      this.setState({displayMap: true})
+      this.setState({
+        loading: false,
+        displayMap: false
+      })
     })
   }
   
@@ -54,6 +56,7 @@ class App extends Component {
     })
     this.setState({
       loading: true,
+      displayMap: false,
     })
   }
  

@@ -23,8 +23,8 @@ function createWindow() {
 		  });
 	
     mainWindow = new BrowserWindow({
-		width: 1200,
-		height: 800,
+		width: 2000,
+		height: 900,
 		webPreferences: {
 			nodeIntegration: true,
 			enableRemoteModule: true,

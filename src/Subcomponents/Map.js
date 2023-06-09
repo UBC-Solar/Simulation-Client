@@ -1,35 +1,55 @@
 import React from "react";
-import GoogleMapReact from 'google-map-react';
+import { MapContainer, TileLayer, useMap, Popup, Marker} from 'react-leaflet';
+
+
+import 'leaflet/dist/leaflet.css';
+import secondsToDhms from '../HelperFunctions/TimeString'
+
+// Change Marker settings
+import L from 'leaflet';
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('../Images/blueCircle.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    iconSize: new L.Point(9, 9),
+    shadowSize: new L.Point(0,0),
+});
+
 
 export default function Map(props) {
-    const coordinates = props.coordinates;
+  // constant controls how many waypoints are generated. Larger number = less waypoints
+  const DIV = 20;
 
-    const defaultProps = {
-        center: {
-          lat: 10.99835602,
-          lng: 77.01502627
-        },
-        zoom: 11
-      };
-      
-      if(coordinates) {
-        return (
-            // Important! Always set the container height explicitly
-            <div style={{ height: '100vh', width: '100%' }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: "AIzaSyAEIKfbYWSmSxWjXglP_taDZAOndjARt_4" }}
-                defaultCenter={defaultProps.center}
-                defaultZoom={defaultProps.zoom}
-              >
-                <div lat={10.99835602} lng={77.01502627}> HELLOOOOOO </div>
-              </GoogleMapReact>
-            </div>
-          );
-      } else {
-        return (<div>RUN SIMULATION TO DISPLAY MAP</div>)
-      }
+  let coordinates = props.coordinates;
+
+  const GenerateMarkers = (array) => {
+    return array.map( (coord, id) => {
+      return (
+        <Marker position={[coord[0], coord[1]]} key={id} >
+            <Popup>
+              lat: {coord[0]} <br /> lng: {coord[1]} <br /> {secondsToDhms(id*DIV)}
+            </Popup>
+        </Marker>
+      );
+    })
+  }
+    
+  if(coordinates) {
+    const coords = coordinates.filter((el, n) => n % DIV === 0);
+    return (
+        // Important! Always set the container height explicitly
+        <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={6} scrollWheelZoom={false}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {GenerateMarkers(coords)}
+        </MapContainer>
+      );
+  } else {
+    return (<div>RUN SIMULATION TO DISPLAY MAP</div>)
+  }
 }
 
-const Marker = props => {
-  return <div className="SuperAwesomePin"></div>
-}
+
