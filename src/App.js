@@ -6,6 +6,8 @@ import Map from './Subcomponents/Map.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row, Col, Container} from 'react-bootstrap';
 
+import Slider from '@mui/material/Slider';
+
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -19,7 +21,8 @@ class App extends Component {
       diplayMap: false,
       json: {
         empty: 100,
-      }
+      },
+      granularity: 15,
     };
   }
 
@@ -72,9 +75,18 @@ class App extends Component {
             </Col>
             <Col id="centerRow">
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
+              <Slider 
+                marks={true}
+                min={15}
+                max={90}
+                step={15}
+                defaultValue={this.granularity}
+                onChange={(e) => this.setState({granularity: e.target.value})}
+                valueLabelDisplay="auto"
+              />
             </Col>
             <Col id="rightRow" md={6}>
-              <Map display={this.state.display} coordinates={this.state.json['GIS_coordinates']} />
+              <Map granularity={this.state.granularity} display={this.state.display} coordinates={this.state.json['GIS_coordinates']} />
             </Col>
           </Row>
         </Container>

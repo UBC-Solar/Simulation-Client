@@ -20,7 +20,7 @@ L.Icon.Default.mergeOptions({
 
 export default function Map(props) {
   // constant controls how many waypoints are generated. Larger number = less waypoints
-  const DIV = 15;
+  const DIV = props.granularity;
 
   let coordinates = props.coordinates;
 
