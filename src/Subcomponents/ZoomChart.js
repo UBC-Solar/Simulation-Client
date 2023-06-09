@@ -88,7 +88,7 @@ export default function ZoomChart(props) {
         // console.log("zoom stop");
         const norm = Normalize(filteredData[0], filteredData[filteredData.length-1], filteredData) 
         const dataPointsInRange = norm.filter(
-          (d) => (d.norm) >= (x1 - CHART_WIDTH/12) && (d.norm) <= (x2 - CHART_WIDTH/12)
+          (d) => (d.norm) >= (x1) && (d.norm) <= (x2)
         );
         setFilteredData(dataPointsInRange);
         setZoomArea(DEFAULT_ZOOM);
