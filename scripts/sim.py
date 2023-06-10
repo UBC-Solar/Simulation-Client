@@ -53,8 +53,9 @@ def run_sim_once():
 
 while True:
     command = input()
-    print(f"(Python Script): {command}")
+    print(f"(Python Script): Received the following input from hidden renderer: {command}")
 
     if command == 'run_sim':
-        # TODO: Actually run the sim here
+        # TODO: May want to create a thread, and print on thread.join (I think thats the syntax)
+        run_sim_once()
         print("simulation_run_complete")

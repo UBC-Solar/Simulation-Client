@@ -62,8 +62,6 @@ class App extends Component {
       loading: true,
     })
   }
- 
-
 
   render () {
     return (

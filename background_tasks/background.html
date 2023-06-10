@@ -11,7 +11,6 @@
         const { data } = args;
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
-            // This method of entering the python path seems sketch
             pythonPath: 'python',
             args: [data],
             mode: 'text'
