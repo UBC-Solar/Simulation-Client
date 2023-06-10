@@ -14,22 +14,28 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     iconSize: new L.Point(10, 10),
     shadowSize: new L.Point(0,0),
-    iconAnchor: new L.Point(10, 10),
+    iconAnchor: new L.Point(5, 5),
 });
 
 
 export default function Map(props) {
   // constant controls how many waypoints are generated. Larger number = less waypoints
   const DIV = props.granularity;
-
-  let coordinates = props.coordinates;
+  const coordinates = props.json["GIS_coordinates"];
+  
 
   const GenerateMarkers = (array) => {
+    const timeRatio = props.json["time_taken"] / coordinates.length;
     return array.map( (coord, id) => {
       return (
         <Marker position={[coord[0], coord[1]]} key={id} >
             <Popup>
-              lat: {coord[0]} <br /> lng: {coord[1]} <br /> {secondsToDhms(id*DIV)}
+              {secondsToDhms(id*DIV*timeRatio)} 
+              <br />
+              {/* MUST CHANGE VALUE OF 400 IF SHORTENED SOC ARRAY LENGTH CHANGED */}
+              state of charge: {Math.round(props.json["state_of_charge"][Math.round(id*DIV*timeRatio/400)]*100)}%
+              <br />  
+              distance: {Math.round(props.json["distances"][Math.round(id*DIV*timeRatio/400)])}km
             </Popup>
         </Marker>
       );
@@ -37,7 +43,7 @@ export default function Map(props) {
   }
     
   if(coordinates) {
-    const coords = coordinates.filter((el, n) => n % DIV === 0);
+    const coords = coordinates.filter((el, n) => n % DIV === DIV-1);
     const blackOptions = { color: '#085cb4' }
     return (
         // Important! Always set the container height explicitly

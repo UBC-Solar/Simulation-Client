@@ -111,12 +111,13 @@ export default function ZoomChart(props) {
         <XAxis
           type="number"
           dataKey="x"
-          domain={["dataMin - 20", "dataMax + 20"]}
+          domain={["auto", "auto"]}
         />
         <YAxis
           type="number"
           dataKey="y"
-          domain={["dataMin - 50", "dataMax + 50"]}
+          domain={["auto", "auto"]}
+          allowDecimals={true}
         />
         <Line 
             dataKey='y'

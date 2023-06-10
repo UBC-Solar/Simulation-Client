@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ZoomChart from './ZoomChart'
+import secondsToDhms from "../HelperFunctions/TimeString"
 
 import '../App.css';
 
@@ -22,7 +23,7 @@ class Stats extends Component {
                         <div id="statDiv">
                             <ul className="statUL">
                                 <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"])}</li>
-                                <li>{"time taken: " + Math.round(this.props.json["time_taken"])}</li>
+                                <li className="timeLi">{"time taken: "} <br/> {secondsToDhms(this.props.json["time_taken"])}</li>
                                 <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>
                                 <li>{this.createGraph("speed_kmh")}</li>
                                 <li>{this.createGraph("distances")}</li>

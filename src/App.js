@@ -83,10 +83,11 @@ class App extends Component {
                 defaultValue={this.state.granularity}
                 onChangeCommitted={(e, val) => this.setState({granularity: val})}
                 valueLabelDisplay="auto"
+                key={`slider-${this.state.granularity}`}
               />
             </Col>
             <Col id="rightRow" md={6}>
-              <Map granularity={this.state.granularity} display={this.state.display} coordinates={this.state.json['GIS_coordinates']} />
+              <Map granularity={this.state.granularity} display={this.state.display} json={this.state.json} />
             </Col>
           </Row>
         </Container>
