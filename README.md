@@ -44,13 +44,13 @@ We will be using a python virtual environment for python package management. Her
 
 3. Activate the virtual environment.
 
-    ##### For UNIX or MacOS #####
+    #### For UNIX or MacOS ####
 
     ```bash
     source venv/bin/activate
     ```
 
-    ##### For Windows #####
+    #### For Windows ####
 
     ```bash
     .\venv\Scripts\activate
