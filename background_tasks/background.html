@@ -12,7 +12,7 @@
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
             // This method of entering the python path seems sketch
-            pythonPath: 'python',
+            pythonPath: 'python3',
             args: [data]
         })
         shell = pyshell
@@ -39,5 +39,6 @@
     // Send a message to the main renderer that the background listener
     // is ready for data
     ipcRenderer.send('BACKGROUND_READY');
+
 
 </script>

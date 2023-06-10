@@ -61,13 +61,13 @@ class App extends Component {
       <div className="App">
         <Container fluid id="appContainer">
           <Row>
-            <Col id="leftRow">
+            <Col id="leftRow" md={5}>
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
-            <Col md={5} id="centerRow">
+            <Col id="centerRow" md={4}>
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
             </Col>
-            <Col id="rightRow"></Col>
+            <Col id="rightRow" md={3}></Col>
           </Row>
         </Container>
       </div>
