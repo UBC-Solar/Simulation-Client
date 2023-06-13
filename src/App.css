@@ -8,12 +8,12 @@
 Main Application Styles
 */
 
-#appContainer {
-}
 
 #leftRow {
-  background-color: white;
+  background-color:  #f3f2f2;
   height:100vh;
+  width: 500px;
+  overflow-y: scroll;
 }
 
 #centerRow {
@@ -50,12 +50,38 @@ Stat Bar Styles
   margin-left: 0px;
   padding: 15px;
   padding-left: 0px;
-  background: #f3f2f2;
   font-size: 15px;
+  background: white;
 
 }
 
 .graphTitle {
   font-weight: bold;
   font-size: 20px;
+}
+
+
+
+
+/* Rechart Styling */
+.recharts-wrapper {
+  cursor: crosshair !important;
+}
+
+.recharts-scatter-symbol {
+  cursor: pointer;
+}
+
+.recharts-cartesian-axis-tick {
+  user-select: none;
+}
+
+.plot-container {
+  /* position: relative; */
+}
+
+.chartButton {
+  /* position: absolute; */
+  left: 200px;
+  z-index: 1;
 }
