@@ -11,29 +11,31 @@
         const { data } = args;
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
-            // This method of entering the python path seems sketch
-            pythonPath: 'python3',
-            args: [data]
+            pythonPath: 'python',
+            args: [data],
+            mode: 'text'
         })
         shell = pyshell
 
         // Run the python script, send the results to the main renderer
-        pyshell.on('message', function(results) {
-                console.log("(Log in bkgrnd renderer): " + results);
+        shell.on('message', function(results) {
+                console.log("Background renderer received the following from the pyshell:\n" + results);
                 ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+                window.port.postMessage({message: results})
         });
     });
 
     ipcRenderer.on('port', e => {
         // port recieved, make it globally available
         console.log("Port end recieved, mounting")
-        window.electronMessagePort = e.ports[0]
-        window.electronMessagePort.onmessage = (event) => {
+        window.port = e.ports[0]
+        port.onmessage = (event) => {
             // handle message here
             console.log("received msg from user thru main")
-            console.log(event.data);
-            shell.send(event.data);
+            console.log(event.data)
+            shell.send(event.data)
         }
+        window.port.start()
     })
 
     // Send a message to the main renderer that the background listener

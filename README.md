@@ -4,6 +4,8 @@ This is the front-end side of the simulation application. The goal of this appli
 
 ### Prerequisites ###
 
+The following are all required:
+
 Python 3.8 or above (https://www.python.org/downloads/)
 
 Git version control (https://git-scm.com/downloads)
@@ -22,7 +24,52 @@ Install node modules
 ```bash
 npm install
 ```
-To start the application run the command
+
+#### Python Virtual Environment Setup ####
+
+We will be using a python virtual environment for python package management. Here are the instructions to set it up.
+
+
+1. Navigate to your project directory, where the `requirements.txt` is located, likely a directory named `Simulation-Client`.
+
+    ```bash
+    cd Simulation-Client
+    ```
+
+2. Create a new python virtual environment.
+
+    ```bash
+    python3 -m venv venv
+    ```
+
+3. Activate the virtual environment.
+
+    #### For UNIX or MacOS ####
+
+    ```bash
+    source venv/bin/activate
+    ```
+
+    #### For Windows ####
+
+    ```bash
+    .\venv\Scripts\activate
+    ```
+
+4. Now, install the dependencies with the following command:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+After you've completed these steps, your virtual environment should be set up and ready to use. You should see `(venv)` before your prompt in the terminal, indicating that the virtual environment is active.
+
+
+### Running the application ###
+
+First - ensure your virtual environment is activated, and packages are up-to-date (see above)
+
+To start the application run the command:
 
 ```bash
 npm start

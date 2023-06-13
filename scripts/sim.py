@@ -1,10 +1,7 @@
-import sys
 import json
 import numpy as np
 from simulation.main import ExecuteSimulation as ex
 from db_interface import influxHandler
-
-print(f"{sys.path}")
 
 # numpy encoder
 class NpEncoder(json.JSONEncoder):
@@ -27,39 +24,41 @@ def first_N_Elements(arr, n):
         arr2[i] = arr[i + startIndex]
     return arr2
 
-# run simulation 
-rawData = ex.GetSimulationData()
+def run_sim_once():
+    # run simulation 
+    rawData = ex.GetSimulationData()
+
+    shorter_speed = first_N_Elements(rawData[0].arrays[0], 10000)
+    shorter_distance = first_N_Elements(rawData[0].arrays[1], 10000)
+    shorter_SOC = first_N_Elements(rawData[0].arrays[2], 10000)
+    shorter_DE = first_N_Elements(rawData[0].arrays[3], 10000)
+
+    influx_hd = influxHandler()
+    influx_data = json.loads(influx_hd.get_SoC_data())
 
 
-shorter_speed = first_N_Elements(rawData[0].arrays[0], 10000)
-shorter_distance = first_N_Elements(rawData[0].arrays[1], 10000)
-shorter_SOC = first_N_Elements(rawData[0].arrays[2], 10000)
-shorter_DE = first_N_Elements(rawData[0].arrays[3], 10000)
-# shorter_GIS = first_N_Elements(rawData[1], 10000)
+    # Creating dictionary from SimulationResults
+    data = {
+        "distance_travelled": rawData[0].distance_travelled,
+        "time_taken": rawData[0].time_taken,
+        "final_soc": rawData[0].final_soc,
+        "speed_kmh": shorter_speed,
+        "distances": shorter_distance,
+        "state_of_charge": shorter_SOC,
+        "delta_energy": shorter_DE,
+        "influx_soc": influx_data,
+        "GIS_coordinates": rawData[1],
+    }
 
-influx_hd = influxHandler()
-influx_data = json.loads(influx_hd.get_SoC_data())
 
-print(rawData[1])
-# Creating dictionary from SimulationResults
-data = {
-    "distance_travelled": rawData[0].distance_travelled,
-    "time_taken": rawData[0].time_taken,
-    "final_soc": rawData[0].final_soc,
-    "speed_kmh": shorter_speed,
-    "distances": shorter_distance,
-    "state_of_charge": shorter_SOC,
-    "delta_energy": shorter_DE,
-    "influx_soc": influx_data,
-    "GIS_coordinates": rawData[1],
-}
+    with open("data.json", "w") as outfile:
+        json.dump(data, outfile, cls=NpEncoder, indent=2)
 
-# Serializing json with NpEncoder
-json_object = json.dumps(data, indent=4, cls=NpEncoder)
+while True:
+    command = input()
+    print(f"(Python Script): Received the following input from hidden renderer: {command}")
 
-# Writing to data.json
-with open("data.json", "w") as outfile:
-    outfile.write(json_object)
-
-# print to console to confirm end of run
-print("simulation_run_complete")
+    if command == 'run_sim':
+        # TODO: May want to create a thread, and print on thread.join (I think thats the syntax)
+        run_sim_once()
+        print("simulation_run_complete")
