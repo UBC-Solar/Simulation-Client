@@ -32,15 +32,7 @@ class App extends Component {
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
 		});
-    
-    // ipcRenderer.on('port', e => {
-    //     // port recieved, make it globally available
-    //     console.log("vis renderer port end received")
-    //     window.electronMessagePort = e.ports[0]
-    //     window.electronMessagePort.onmessage = MessageEvent => {
-    //         // handle message here
-    //     }
-    // })
+  
     ipcRenderer.on('JSON_DATA', (event, args) => {
       this.setState({
         json: args,

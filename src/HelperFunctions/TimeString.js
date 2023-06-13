@@ -1,3 +1,6 @@
+
+// Takes time in seconds and converts it to a second, minutes, hours, day string.
+// Useful for stat and map component
 export default function secondsToDhms(seconds) {
     seconds = Number(seconds)
     var d = Math.floor(seconds / (3600 * 24))

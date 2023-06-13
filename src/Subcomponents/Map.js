@@ -1,5 +1,5 @@
 import React from "react";
-import { MapContainer, TileLayer, useMap, Popup, Marker, Polyline} from 'react-leaflet';
+import { MapContainer, TileLayer, Popup, Marker, Polyline} from 'react-leaflet';
 
 
 import 'leaflet/dist/leaflet.css';
@@ -43,8 +43,9 @@ export default function Map(props) {
   }
     
   if(coordinates) {
+    // shortened coordinate array
     const coords = coordinates.filter((el, n) => n % DIV === DIV-1);
-    const blackOptions = { color: '#085cb4' }
+    const colorOptions = { color: '#085cb4' }
     return (
         // Important! Always set the container height explicitly
         <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={8} scrollWheelZoom={false}>
@@ -52,11 +53,12 @@ export default function Map(props) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Polyline pathOptions={blackOptions} positions={coords} />
+          <Polyline pathOptions={colorOptions} positions={coords} />
           {GenerateMarkers(coords)}
         </MapContainer>
       );
   } else {
+    // TODO replace with icon
     return (<div>RUN SIMULATION TO DISPLAY MAP</div>)
   }
 }
