@@ -47,15 +47,15 @@ function createWindow() {
 }
 app.on('ready', createWindow);
 
-// TODO: Temporarily set this to just quit to see if it would work properly with windows
 app.on('window-all-closed', () => {
-  // if (process.platform !== 'darwin') {
-  //  app.quit();
-  //}
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (BrowserWindow.getAllWindows().length === 0) {
+	console.log("Booting in activate")
     createWindow();
   }
 });
@@ -73,6 +73,11 @@ let hiddenWindow;
 // This listens for the command to start background
 // and starts the background/hidden renderer
 ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
+	// This catches when the visible renderer attemps to boot another hidden renderer, when one is already running
+	if (hiddenWindow){
+		console.log("Background window already exists");
+		return;
+	}
 	console.log("Starting background via main")
 	const backgroundFileUrl = url.format({
 		pathname: path.join(__dirname, '../background_tasks/background.html'),
@@ -109,12 +114,9 @@ ipcMain.on('START_BACKGROUND_VIA_MAIN', (event, args) => {
 ipcMain.on('MESSAGE_FROM_BACKGROUND', (event, args) => {
 	// parse data output json
 	const json = JSON.parse(JSON.stringify(simDataJSON));
-	console.log("test");
-	console.log(json);
 	mainWindow.webContents.send('MESSAGE_FROM_BACKGROUND_VIA_MAIN', args.message);
 	if(args.message === "simulation_run_complete") {
 		mainWindow.webContents.send('JSON_DATA', json)
-		hiddenWindow.close();
 	}
 });
 
@@ -131,6 +133,4 @@ ipcMain.on('BACKGROUND_READY', (event, args) => {
 	event.reply('START_PROCESSING', {
 		data: cache.data,
 	})
-
 });
-

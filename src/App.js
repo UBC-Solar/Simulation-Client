@@ -22,7 +22,8 @@ class App extends Component {
       json: {
         empty: 100,
       },
-      granularity: 90,
+      hasStartedBackground: false,
+      granularity: 90
     };
   }
 
@@ -32,7 +33,25 @@ class App extends Component {
     ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
 			console.log(args);
 		});
-  
+    
+    ipcRenderer.on('port', e => {
+      // port recieved, make it globally available
+      console.log("vis renderer port end received")
+      window.port = e.ports[0]
+      window.port.onmessage = (event) => {
+        console.log(event.data)
+          // handle message here
+      }
+      window.port.start()
+    })
+
+    if (!this.hasStartedBackground){
+      ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
+        string: "HELLO WORLD",
+      })
+      this.setState({ hasStartedBackground: true })
+    }
+
     ipcRenderer.on('JSON_DATA', (event, args) => {
       this.setState({
         json: args,
@@ -45,17 +64,13 @@ class App extends Component {
   }
   
   startSim = () => {
-    console.log("STARTING SIMULATION")
-    ipcRenderer.send('START_BACKGROUND_VIA_MAIN', {
-      string: "HELLO WORLD",
-    })
+    console.log("RE-RUNNING SIMULATION")
+    window.port.postMessage('run_sim')
     this.setState({
       loading: true,
       displayMap: false,
     })
   }
- 
-
 
   render () {
     return (
