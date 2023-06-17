@@ -18,20 +18,18 @@ class NpEncoder(json.JSONEncoder):
 # shortens arrays from simulation output  
 # must take elements from middle of array because otherwise values of interest area all zero
 def first_N_Elements(arr, n):
-    startIndex = 10000
-    arr2 = np.zeros(n)
-    for i in range(0, n):    
-        arr2[i] = arr[i + startIndex]
+    arr2 = arr[0::n].copy()
     return arr2
 
 def run_sim_once():
     # run simulation 
     rawData = ex.GetSimulationData()
 
-    shorter_speed = first_N_Elements(rawData[0].arrays[0], 10000)
-    shorter_distance = first_N_Elements(rawData[0].arrays[1], 10000)
-    shorter_SOC = first_N_Elements(rawData[0].arrays[2], 10000)
-    shorter_DE = first_N_Elements(rawData[0].arrays[3], 10000)
+
+    shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
+    shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
+    shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
+    shorter_DE = first_N_Elements(rawData[0].arrays[3], 400)
 
     influx_hd = influxHandler()
     influx_data = json.loads(influx_hd.get_SoC_data())

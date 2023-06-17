@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import Stats from './Subcomponents/Stats.js'
+import Map from './Subcomponents/Map.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row, Col, Container} from 'react-bootstrap';
+
+import Slider from '@mui/material/Slider';
 
 
 const electron = window.require('electron');
@@ -15,10 +18,12 @@ class App extends Component {
     super(props);
     this.state = {
       loading: false,
+      diplayMap: false,
       json: {
         empty: 100,
       },
-      hasStartedBackground: false
+      hasStartedBackground: false,
+      granularity: 90
     };
   }
 
@@ -30,14 +35,14 @@ class App extends Component {
 		});
     
     ipcRenderer.on('port', e => {
-        // port recieved, make it globally available
-        console.log("vis renderer port end received")
-        window.port = e.ports[0]
-        window.port.onmessage = (event) => {
-          console.log(event.data)
-            // handle message here
-        }
-        window.port.start()
+      // port recieved, make it globally available
+      console.log("vis renderer port end received")
+      window.port = e.ports[0]
+      window.port.onmessage = (event) => {
+        console.log(event.data)
+          // handle message here
+      }
+      window.port.start()
     })
 
     if (!this.hasStartedBackground){
@@ -51,7 +56,10 @@ class App extends Component {
       this.setState({
         json: args,
       })
-      this.setState({loading: false})
+      this.setState({
+        loading: false,
+        displayMap: false
+      })
     })
   }
   
@@ -60,6 +68,7 @@ class App extends Component {
     window.port.postMessage('run_sim')
     this.setState({
       loading: true,
+      displayMap: false,
     })
   }
 
@@ -67,14 +76,26 @@ class App extends Component {
     return (
       <div className="App">
         <Container fluid id="appContainer">
-          <Row>
+          <Row id='appRow'>
             <Col id="leftRow" md={5}>
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
-            <Col id="centerRow" md={4}>
+            <Col id="centerRow">
               <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
+              <Slider 
+                marks={true}
+                min={10}
+                max={90}
+                step={10}
+                defaultValue={this.state.granularity}
+                onChangeCommitted={(e, val) => this.setState({granularity: val})}
+                valueLabelDisplay="auto"
+                key={`slider-${this.state.granularity}`}
+              />
             </Col>
-            <Col id="rightRow" md={3}></Col>
+            <Col id="rightRow" md={6}>
+              <Map granularity={this.state.granularity} display={this.state.display} json={this.state.json} />
+            </Col>
           </Row>
         </Container>
       </div>

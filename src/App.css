@@ -8,6 +8,9 @@
 Main Application Styles
 */
 
+#appRow {
+  width: 100vw;
+}
 
 #leftRow {
   background-color:  #f3f2f2;
@@ -21,7 +24,8 @@ Main Application Styles
 }
 
 #rightRow {
-  background-color: white;
+  background-color: #f3f2f2;
+  padding: 0px;
 }
 
 /* 
@@ -55,6 +59,7 @@ Stat Bar Styles
 
 }
 
+
 .graphTitle {
   font-weight: bold;
   font-size: 20px;
@@ -81,7 +86,17 @@ Stat Bar Styles
 }
 
 .chartButton {
-  /* position: absolute; */
   left: 200px;
   z-index: 1;
 }
+
+
+
+
+/* Map styling */
+
+#MapCont {
+  height: 100vh;
+  width: 100% ;
+}
+
