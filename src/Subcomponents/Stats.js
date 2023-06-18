@@ -3,6 +3,7 @@ import ZoomChart from './ZoomChart'
 import secondsToDhms from "../HelperFunctions/TimeString"
 
 import '../App.css';
+import loading from "../Images/loading.gif"
 
 class Stats extends Component {
     createGraph(arrayName) {
@@ -16,7 +17,7 @@ class Stats extends Component {
             let loadingString = "simulation running";
             let emptyString = "NO DATA..."
             if(this.props.loading){
-                return <div>{loadingString}</div>;
+                return <img alt='loading' style={{width: '75px', height: '75px'}} src={loading}/>
             } else {
                 if (this.props.json["empty"] === undefined){
                     return(

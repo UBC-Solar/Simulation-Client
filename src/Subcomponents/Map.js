@@ -48,14 +48,16 @@ export default function Map(props) {
     const colorOptions = { color: '#085cb4' }
     return (
         // Important! Always set the container height explicitly
-        <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={8} scrollWheelZoom={false}>
+        <div>
+           <MapContainer id='MapCont' center={[coordinates[0][0], coordinates[0][1]]} zoom={8} scrollWheelZoom={false}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Polyline pathOptions={colorOptions} positions={coords} />
-          {GenerateMarkers(coords)}
-        </MapContainer>
+            {GenerateMarkers(coords)}
+          </MapContainer>
+        </div>
       );
   } else {
     // TODO replace with icon

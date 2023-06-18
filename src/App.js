@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+
+import {Row, Col, Container} from 'react-bootstrap';
+import Button from '@mui/material/Button';
+
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Stats from './Subcomponents/Stats.js'
 import Map from './Subcomponents/Map.js'
+import SimArgs from './Subcomponents/SimArgs';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {Row, Col, Container} from 'react-bootstrap';
 
-import Slider from '@mui/material/Slider';
+
 
 
 const electron = window.require('electron');
@@ -23,7 +28,10 @@ class App extends Component {
         empty: 100,
       },
       hasStartedBackground: false,
-      granularity: 90
+      mapGranularity: 90,
+      simArgs: {
+        granularity: 10,
+      },
     };
   }
 
@@ -81,20 +89,20 @@ class App extends Component {
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
             <Col id="centerRow">
-              <button id="fireSimButton" onClick={this.startSim}>Render Simulation</button>
-              <Slider 
-                marks={true}
-                min={10}
-                max={90}
-                step={10}
-                defaultValue={this.state.granularity}
-                onChangeCommitted={(e, val) => this.setState({granularity: val})}
-                valueLabelDisplay="auto"
-                key={`slider-${this.state.granularity}`}
+              <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
+              <SimArgs 
+                mapGran={this.state.mapGranularity} 
+                args={this.state.simArgs} 
+                commitChangeMap={(e, val) => this.setState({mapGranularity: val})}
+                commitChangeSim={(e, val) => {
+                  let newArgs = this.state.simArgs;
+                  newArgs.granularity = val;
+                  this.setState({simArgs: newArgs});
+                }}
               />
             </Col>
             <Col id="rightRow" md={6}>
-              <Map granularity={this.state.granularity} display={this.state.display} json={this.state.json} />
+              <Map granularity={this.state.mapGranularity} display={this.state.displayMap} json={this.state.json} />
             </Col>
           </Row>
         </Container>
