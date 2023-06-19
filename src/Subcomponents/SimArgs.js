@@ -1,11 +1,19 @@
 import React from "react";
 import Slider from '@mui/material/Slider';
 import {Row, Col} from 'react-bootstrap';
-import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MuiToggleButton from "@mui/material/ToggleButton";
+import { styled } from "@mui/material/styles";
 
 import '../App.css';
 
+
+const ToggleButton = styled(MuiToggleButton)({
+  "&.Mui-selected, &.Mui-selected:hover": {
+    color: "white",
+    backgroundColor: '#1664c0',
+  }
+});
 
 export default function SimArgs(props) {
     const mapGran = props.mapGran;
@@ -13,6 +21,17 @@ export default function SimArgs(props) {
     const commitChangeMap = props.commitChangeMap;
     const commitChangeSim = props.commitChangeSim;
 
+    const controlGolang = {
+        value: simArgs.golang,
+        onChange: props.handleChanges[0],
+        exclusive: true,
+    };
+
+    const controlOptimize = {
+        value: simArgs.optimize,
+        onChange: props.handleChanges[1],
+        exclusive: true,
+    };
     return(
         <div id="simArgSection">
             <div className='simArgDiv'>
@@ -39,21 +58,24 @@ export default function SimArgs(props) {
                     onChangeCommitted={commitChangeSim}
                     valueLabelDisplay="auto"
                     key={`slider-${simArgs.granularity}`}
-                    color="secondary"
+                    color="primary"
                 />
             </div>
             <div className='simArgDiv'>
-                <Row>
-                    <Col xs={6}>
-                        <ToggleButtonGroup color="primary"> 
-                            <ToggleButton className="toggle">Left</ToggleButton>
-                            <ToggleButton>RIGHT</ToggleButton>
+                <Row  >
+                    <Col>
+                        Golang <br/>
+                        <ToggleButtonGroup className="toggle" color="primary" {...controlGolang}> 
+                            <ToggleButton value="false"><div style={{color: 'white', 'width':'60px'}}>Off</div></ToggleButton>
+                            <ToggleButton value="true"><div style={{color: 'white', 'width':'60px'}}>On</div></ToggleButton>
                         </ToggleButtonGroup>
+                        <br /><br />
                     </Col>
-                    <Col xs={6}>
-                        <ToggleButtonGroup color="primary">
-                            <ToggleButton>LEFT</ToggleButton>
-                            <ToggleButton>RIGHT</ToggleButton>
+                    <Col>
+                        Optimize For <br/>
+                        <ToggleButtonGroup className="toggle" color="primary" {...controlOptimize}>
+                        <ToggleButton value="timeTaken"><div style={{color: 'white', 'width':'60px'}}>Time</div></ToggleButton>
+                            <ToggleButton value="distance"><div style={{color: 'white', 'width':'60px', "fontSize": "11px"}}>Distance</div></ToggleButton>
                         </ToggleButtonGroup>
                     </Col>
                 </Row>

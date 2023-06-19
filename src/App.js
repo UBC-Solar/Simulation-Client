@@ -24,13 +24,15 @@ class App extends Component {
     this.state = {
       loading: false,
       diplayMap: false,
+      hasStartedBackground: false,
+      mapGranularity: 90,
       json: {
         empty: 100,
       },
-      hasStartedBackground: false,
-      mapGranularity: 90,
       simArgs: {
         granularity: 10,
+        golang: "true",
+        optimize: "timeTaken",
       },
     };
   }
@@ -80,15 +82,28 @@ class App extends Component {
     })
   }
 
+  handleChangeGo = (e, value) => {
+    if(value) {
+      const args = this.state.simArgs;
+      args.golang = value;
+      this.setState({simArgs: args});
+    }
+  }
+  handleChangeOptimize = (e, value) => {
+    const args = this.state.simArgs;
+    args.optimize = value;
+    this.setState({simArgs: args});
+  }
+
   render () {
     return (
       <div className="App">
         <Container fluid id="appContainer">
           <Row id='appRow'>
-            <Col id="leftRow" md={5}>
+            <Col id="leftRow" xl={4}>
               <Stats loading={this.state.loading} json={this.state.json}/>
             </Col>
-            <Col id="centerRow">
+            <Col id="centerRow" xl={2}>
               <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
               <SimArgs 
                 mapGran={this.state.mapGranularity} 
@@ -99,9 +114,10 @@ class App extends Component {
                   newArgs.granularity = val;
                   this.setState({simArgs: newArgs});
                 }}
+                handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
             </Col>
-            <Col id="rightRow" md={6}>
+            <Col id="rightRow" xl={6}>
               <Map granularity={this.state.mapGranularity} display={this.state.displayMap} json={this.state.json} />
             </Col>
           </Row>

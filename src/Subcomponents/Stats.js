@@ -23,7 +23,7 @@ class Stats extends Component {
                     return(
                         <div id="statDiv">
                             <ul className="statUL">
-                                <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"])}</li>
+                                <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"]) +" km"}</li>
                                 <li className="timeLi">{"time taken: "} <br/> {secondsToDhms(this.props.json["time_taken"])}</li>
                                 <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>
                                 <li>{this.createGraph("speed_kmh")}</li>
