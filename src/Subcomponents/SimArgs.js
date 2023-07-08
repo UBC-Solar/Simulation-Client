@@ -66,7 +66,7 @@ export default function SimArgs(props) {
                     <Col>
                         Golang <br/>
                         <ToggleButtonGroup className="toggle" color="primary" {...controlGolang}> 
-                            <ToggleButton value="false"><div style={{color: 'white', 'width':'60px'}}>Off</div></ToggleButton>
+                            <ToggleButton value="false"><div style={{color: 'white', 'width':'60px', height: '20px'}}>Off</div></ToggleButton>
                             <ToggleButton value="true"><div style={{color: 'white', 'width':'60px'}}>On</div></ToggleButton>
                         </ToggleButtonGroup>
                         <br /><br />
@@ -74,7 +74,7 @@ export default function SimArgs(props) {
                     <Col>
                         Optimize For <br/>
                         <ToggleButtonGroup className="toggle" color="primary" {...controlOptimize}>
-                        <ToggleButton value="timeTaken"><div style={{color: 'white', 'width':'60px'}}>Time</div></ToggleButton>
+                        <ToggleButton value="timeTaken"><div style={{color: 'white', 'width':'60px', height: '20px'}}>Time</div></ToggleButton>
                             <ToggleButton value="distance"><div style={{color: 'white', 'width':'60px', "fontSize": "11px"}}>Distance</div></ToggleButton>
                         </ToggleButtonGroup>
                     </Col>

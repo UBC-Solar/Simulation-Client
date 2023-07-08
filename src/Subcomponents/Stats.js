@@ -14,10 +14,9 @@ class Stats extends Component {
 
     render() {
         let returnString = () => {
-            let loadingString = "simulation running";
             let emptyString = "NO DATA..."
             if(this.props.loading){
-                return <img alt='loading' style={{width: '75px', height: '75px'}} src={loading}/>
+                return <img alt='loading' style={{width: '75px', height: '75px', marginTop: '375px'}} src={loading}/>
             } else {
                 if (this.props.json["empty"] === undefined){
                     return(

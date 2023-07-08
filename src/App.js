@@ -90,9 +90,11 @@ class App extends Component {
     }
   }
   handleChangeOptimize = (e, value) => {
-    const args = this.state.simArgs;
-    args.optimize = value;
-    this.setState({simArgs: args});
+    if(value) {
+      const args = this.state.simArgs;
+      args.optimize = value;
+      this.setState({simArgs: args});
+    }
   }
 
   render () {

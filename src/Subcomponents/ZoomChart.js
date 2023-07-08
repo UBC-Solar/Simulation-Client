@@ -7,7 +7,7 @@ import '../App.css';
 
 const MIN_ZOOM = 5; // adjust based on your data
 const DEFAULT_ZOOM = { x1: null, y1: null, x2: null, y2: null };
-const CHART_WIDTH = 450;
+const CHART_WIDTH = 400;
 
 
 const Normalize = (min, max, dataset) => {
