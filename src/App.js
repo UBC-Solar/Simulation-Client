@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Stats from './Subcomponents/Stats.js'
 import Map from './Subcomponents/Map.js'
+import ValueTable from './Subcomponents/ValueTable.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Row, Col, Container} from 'react-bootstrap';
@@ -23,7 +24,15 @@ class App extends Component {
         empty: 100,
       },
       hasStartedBackground: false,
-      granularity: 90
+      granularity: 90,
+      currentValues: {
+        stateOfCharge: 0,
+        currentVelocity: 0
+      },
+      expectedValues: {
+        stateOfCharge: 0,
+        currentVelocity: 0
+      }
     };
   }
 
@@ -72,6 +81,12 @@ class App extends Component {
     })
   }
 
+    requestRecentValues = () => {
+    if(window.port){
+      window.port.postMessage('get_most_recent');
+    }
+  }
+
   render () {
     return (
       <div className="App">
@@ -92,6 +107,11 @@ class App extends Component {
                 valueLabelDisplay="auto"
                 key={`slider-${this.state.granularity}`}
               />
+              <ValueTable 
+                currentValues={this.state.currentValues} 
+                expectedValues={this.state.expectedValues} 
+                sendMostRecentMessage={this.requestRecentValues} 
+                />
             </Col>
             <Col id="rightRow" md={6}>
               <Map granularity={this.state.granularity} display={this.state.display} json={this.state.json} />

@@ -6,7 +6,7 @@ import json
 
 INFLUX_URL = "http://143.198.12.56:8086/"
 INFLUX_TOKEN = "thdvwNeSQIrO367krhsxI81v8APcNNdHGOBt1kEQqPJVXRBMyyHXgmf9_zHDmm0EUHz2YTrehTuvfay7I8L9ew=="
-INFLUX_BUCKET = "SimTest"
+INFLUX_BUCKET = "Test"
 INFLUX_ORG = "UBC Solar"
 
 # for record in record:
@@ -20,10 +20,17 @@ class influxHandler:
         self.query_api = self.client.query_api()
 
     def get_SoC_data(self):
-        self.records = self.query_api.query_stream('from(bucket:"Test") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "state_of_charge")')
+        records = self.query_api.query_stream('from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "state_of_charge")')
         vals = []
-        for record in self.records:
+        for record in records:
             vals.append(record["_value"])
+        return json.dumps(vals, indent=2)
 
-        json_obj = json.dumps(vals, indent=4)
-        return json_obj
+    def get_most_recent(self, fields):
+        result = {}
+        for field in fields:
+            query = f'from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "{field}") |> last()'
+            records = self.query_api.query_stream(query)
+            for record in records:
+                result[field] = record['_value']
+        return json.dumps(result, indent=2)
