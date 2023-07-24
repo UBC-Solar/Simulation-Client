@@ -9,8 +9,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Stats from './Subcomponents/Stats.js'
 import Map from './Subcomponents/Map.js'
 import SimArgs from './Subcomponents/SimArgs';
+import Bot from "./Subcomponents/Bot"
 
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MuiToggleButton from "@mui/material/ToggleButton";
+import { styled } from "@mui/material/styles";
 
+const ToggleButton = styled(MuiToggleButton)({
+  "&.Mui-selected, &.Mui-selected:hover": {
+    color: "white",
+    backgroundColor: '#022D36',
+
+  }
+});
 
 
 
@@ -26,6 +37,7 @@ class App extends Component {
       diplayMap: false,
       hasStartedBackground: false,
       mapGranularity: 90,
+      rightCol: 'stats',
       json: {
         empty: 100,
       },
@@ -97,13 +109,38 @@ class App extends Component {
     }
   }
 
+
+  
   render () {
+    const controlRightCol = {
+      value: this.state.rightCol,
+      onChange: (e) => {
+        if(this.state.rightCol === 'stats') {
+          this.setState({rightCol:'bot'})
+        } else {
+          this.setState({rightCol: 'stats'})
+        }
+      },
+      exclusive: true,
+    };
+
+    const statProvider = () => {
+      if(this.state.rightCol === 'stats'){
+        return(<Stats loading={this.state.loading} json={this.state.json}/>);
+      } else {
+        return(<Bot />);
+      }
+    }
     return (
       <div className="App">
         <Container fluid id="appContainer">
           <Row id='appRow'>
             <Col id="leftRow" xl={4}>
-              <Stats loading={this.state.loading} json={this.state.json}/>
+                <ToggleButtonGroup className="toggleStats" color="primary" {...controlRightCol}> 
+                  <ToggleButton value="stats"><div style={{color: 'white', 'width':'100px'}}>Graphs</div></ToggleButton>
+                  <ToggleButton value="bot"><div style={{color: 'white', 'width':'100px'}}>Bot</div></ToggleButton>
+                </ToggleButtonGroup>
+                {statProvider()}
             </Col>
             <Col id="centerRow" xl={2}>
               <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>

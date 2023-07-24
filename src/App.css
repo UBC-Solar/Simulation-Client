@@ -101,6 +101,12 @@
   font-size: 20px;
 }
 
+.toggleStats {
+  color: white;
+  margin: auto;
+  border: 1px solid grey;
+  
+}
 
 
 
@@ -142,4 +148,22 @@
   /* outline: 20px solid black; */
 }
 
+/* Bot Styling */
+/* ----------------------------------- */
+/* ----------------------------------- */
 
+.botListItem {
+  text-align: center;
+  padding: 10px;
+}
+
+.botUnorderedList {
+  list-style-type: none;
+  align-items: center;
+}
+
+.botInputText {
+  width: 75%;
+  height: 35px;
+  overflow-wrap: break-word;
+}
