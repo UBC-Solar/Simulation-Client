@@ -4,6 +4,7 @@ import secondsToDhms from "../HelperFunctions/TimeString"
 
 import '../App.css';
 import loading from "../Images/loading.gif"
+import MultiSelect from './MultiSelect';
 
 class Stats extends Component {
     createGraph(arrayName) {
@@ -28,7 +29,7 @@ class Stats extends Component {
                                 <li>{this.createGraph("speed_kmh")}</li>
                                 <li>{this.createGraph("distances")}</li>
                                 <li>{this.createGraph("state_of_charge")}</li>
-                                <li>{this.createGraph("influx_soc")}</li>
+                                {/* <li>{this.createGraph("influx_soc")}</li> */}
                             </ul>
 
                         </div>
@@ -41,6 +42,7 @@ class Stats extends Component {
         
         return(
             <div>
+                <MultiSelect Select={this.props.Select} handleChange={this.props.handleChange}/>
                 {returnString()}
             </div>
         );

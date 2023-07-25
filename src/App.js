@@ -38,6 +38,7 @@ class App extends Component {
       hasStartedBackground: false,
       mapGranularity: 90,
       rightCol: 'stats',
+      Select: "SOC",
       json: {
         empty: 100,
       },
@@ -109,6 +110,9 @@ class App extends Component {
     }
   }
 
+  handleChangeSelect = (e) => {
+    this.setState({Select: e.target.value});
+  }
 
   
   render () {
@@ -126,7 +130,14 @@ class App extends Component {
 
     const statProvider = () => {
       if(this.state.rightCol === 'stats'){
-        return(<Stats loading={this.state.loading} json={this.state.json}/>);
+        return(
+          <Stats 
+            loading={this.state.loading} 
+            json={this.state.json} 
+            handleChange={this.handleChangeSelect}
+            Select={this.state.Select}
+          />
+        );
       } else {
         return(<Bot />);
       }

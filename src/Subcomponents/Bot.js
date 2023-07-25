@@ -50,10 +50,10 @@ export default function Bot(props) {
         pip install -r requirements.txt
         Once these steps are completed, your virtual environment will be set up and ready to use. Look for "(venv)" before your prompt in the terminal to verify that the virtual environment is active.
     `
-
+    console.log(process.env.REACT_APP_API_KEY)
 
     const configuration = new Configuration({
-        apiKey: "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",
+        apiKey: process.env.REACT_APP_API_KEY,
     });
     const openai = new OpenAIApi(configuration);
 
