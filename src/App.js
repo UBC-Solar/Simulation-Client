@@ -38,7 +38,7 @@ class App extends Component {
       hasStartedBackground: false,
       mapGranularity: 90,
       rightCol: 'stats',
-      Select: "SOC",
+      ExtraGraphs: [],
       json: {
         empty: 100,
       },
@@ -111,7 +111,13 @@ class App extends Component {
   }
 
   handleChangeSelect = (e) => {
-    this.setState({Select: e.target.value});
+    const {
+      target: { value },
+    } = e;
+    this.setState({
+      ExtraGraphs: typeof value === 'string' ? value.split(',') : value,
+    });
+    console.log(typeof value === 'string' ? value.split(',') : value,);
   }
 
   
@@ -135,7 +141,7 @@ class App extends Component {
             loading={this.state.loading} 
             json={this.state.json} 
             handleChange={this.handleChangeSelect}
-            Select={this.state.Select}
+            Select={this.state.ExtraGraphs}
           />
         );
       } else {

@@ -14,10 +14,11 @@ export default function MultiSelect(props) {
     return (
         <div>
           <FormControl className="selectDiv" sx={{ m: 1, minWidth: 200, marginTop: 3, marginBottom: 0 }} size="large">
-            <InputLabel sx={{color: "white"}} id="demo-simple-select-label">View Graph</InputLabel>
+            <InputLabel sx={{color: "white"}} id="demo-simple-select-label">Extra Graphs</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              multiple
               sx={{ 
                 color: "white",
                 '.MuiOutlinedInput-notchedOutline': {
