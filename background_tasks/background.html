@@ -20,20 +20,23 @@
         // Run the python script, send the results to the main renderer
         shell.on('message', function(results) {
                 console.log("Background renderer received the following from the pyshell:\n" + results);
-                ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
-                window.port.postMessage({message: results})
+                window.port.postMessage({message: results});
         });
     });
 
     ipcRenderer.on('port', e => {
         // port recieved, make it globally available
-        console.log("Port end recieved, mounting")
-        window.port = e.ports[0]
-        port.onmessage = (event) => {
+        console.log("Port end in hidden renderer recieved, mounting");
+        window.port = e.ports[0];
+        window.port.onmessage = (event) => {
             // handle message here
-            console.log("received msg from user thru main")
-            console.log(event.data)
-            shell.send(event.data)
+            console.log("Received msg from user thru main");
+            console.log(event.data);
+            shell.send(event.data);
+        }
+        window.port.onclose = () => {
+            console.log("Visible port end closed - requesting new port")
+            ipcRenderer.send('PORT_CLOSED');
         }
         window.port.start()
     })
