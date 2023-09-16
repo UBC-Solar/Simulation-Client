@@ -90,3 +90,8 @@ The final process is the hidden renderer. When prompted by the main process, it 
 The hidden process window ( an instance of electron's BrowserWindow ) is created in /public/electron.js. 
 The /background_task folder contains html files that launch the python scripts.
 Python scripts, which import the simulation pip package, are located in the /scripts folder.
+
+### Troubleshooting ###
+
+See this document for detailed setup and troubleshooting tips: https://docs.google.com/document/d/1Q1ld8U40WpwkEG6oSTn0YFeIRsCWsoDMFMWuuPdepPA/edit
+
