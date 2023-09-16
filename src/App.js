@@ -81,9 +81,11 @@ class App extends Component {
     })
   }
 
-    requestRecentValues = () => {
+  requestRecentValues = () => {
     if(window.port){
       window.port.postMessage('get_most_recent');
+    } else {
+      console.log('No port detected!!')
     }
   }
 
@@ -107,11 +109,11 @@ class App extends Component {
                 valueLabelDisplay="auto"
                 key={`slider-${this.state.granularity}`}
               />
-              <ValueTable 
+                <ValueTable 
                 currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 
-                />
+              />
             </Col>
             <Col id="rightRow" md={6}>
               <Map granularity={this.state.granularity} display={this.state.display} json={this.state.json} />

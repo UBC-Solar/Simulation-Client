@@ -23,17 +23,14 @@ def first_N_Elements(arr, n):
     return arr2
 
 def run_sim_once():
+    return # Temporary early return - skipping sim run
     # run simulation 
     rawData = ex.GetSimulationData()
-
-
     shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
     shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
     shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
     shorter_DE = first_N_Elements(rawData[0].arrays[3], 400)
-
     influx_data = json.loads(influx_hd.get_SoC_data())
-
 
     # Creating dictionary from SimulationResults
     data = {
@@ -56,13 +53,12 @@ while True:
         command = input()
         # print(f"(Python Script): Received the following input from hidden renderer: {command}")
         if command == 'run_sim':
-            # TODO: May want to create a thread, and print on thread.join (I think thats the syntax)
-            # run_sim_once()
+            # TODO: May want to create a thread
+            run_sim_once()
             print("simulation_run_complete")
         if command == 'get_most_recent':
             fields = ['vehicle_velocity', 'state_of_charge']
             results = influx_hd.get_most_recent(fields)
-            print(results)
             with open('most_recent_data.json', 'w', encoding='utf-8') as f:
                 json.dump(results, f, indent=2)
             print("most_recent_complete")

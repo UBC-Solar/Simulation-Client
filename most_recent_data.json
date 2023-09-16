@@ -1,1 +1,1 @@
-"{\n  \"vehicle_velocity\": -3.684423065228241e+33,\n  \"state_of_charge\": 110\n}"
+"{\n  \"vehicle_velocity\": {\n    \"value\": -3.684423065228241e+33,\n    \"time\": \"2023-07-23T22:54:04.486280+00:00\"\n  },\n  \"state_of_charge\": {\n    \"value\": 110,\n    \"time\": \"2023-07-23T22:54:04.375927+00:00\"\n  }\n}"

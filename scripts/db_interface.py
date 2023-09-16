@@ -32,5 +32,7 @@ class influxHandler:
             query = f'from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "{field}") |> last()'
             records = self.query_api.query_stream(query)
             for record in records:
-                result[field] = record['_value']
+                result[field] = {"value": record['_value'],
+                                 "time": record['_time'].isoformat()
+                }
         return json.dumps(result, indent=2)
