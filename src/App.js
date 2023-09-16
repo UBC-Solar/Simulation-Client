@@ -51,10 +51,6 @@ class App extends Component {
         console.log(event.data)
           // handle message here
       }
-      window.port.onclose = () => {
-          console.log("Hidden port end closed - requesting new port")
-          ipcRenderer.send('PORT_CLOSED');
-      }
       window.port.start()
     })
 

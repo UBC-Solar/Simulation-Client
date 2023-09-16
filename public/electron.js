@@ -127,12 +127,6 @@ ipcMain.on('MESSAGE_FROM_USER', (event, args) => {
 	console.log("From main process: " + args.message);
 });
 
-ipcMain.on('PORT_CLOSED', (event, args) => {
-	const { port1, port2 } = new MessageChannelMain()
-	mainWindow.webContents.postMessage('port', null, [port1])
-	hiddenWindow.webContents.postMessage('port', null, [port2])
-})
-
 // This listens for the background renderer to confirm it has been set up
 // it then sends the cached data to be processed as a response
 ipcMain.on('BACKGROUND_READY', (event, args) => {
