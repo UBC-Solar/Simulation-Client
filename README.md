@@ -78,7 +78,7 @@ This command should trigger an electron window to open with the application runn
 
 ### General Architechture ###
 
-![Architechture](./images/image.png)
+![Architechture](./images/architecture_diagram.png)
 
 This application consists of three main parts. The first one is the main process, which sends commands and passes information between the other two subprocesses. Information is passed to and from the main process using electron's messaging ports called IPC channels. More information here ( https://www.electronjs.org/docs/latest/tutorial/ipc ).
 The majority of the code for the main process is found in /public/electron.js
