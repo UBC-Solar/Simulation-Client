@@ -78,7 +78,7 @@ This command should trigger an electron window to open with the application runn
 
 ### General Architechture ###
 
-![Architechture](./images/image.png)
+![Architechture](./images/architecture_diagram.png)
 
 This application consists of three main parts. The first one is the main process, which sends commands and passes information between the other two subprocesses. Information is passed to and from the main process using electron's messaging ports called IPC channels. More information here ( https://www.electronjs.org/docs/latest/tutorial/ipc ).
 The majority of the code for the main process is found in /public/electron.js
@@ -90,3 +90,8 @@ The final process is the hidden renderer. When prompted by the main process, it 
 The hidden process window ( an instance of electron's BrowserWindow ) is created in /public/electron.js. 
 The /background_task folder contains html files that launch the python scripts.
 Python scripts, which import the simulation pip package, are located in the /scripts folder.
+
+### Troubleshooting ###
+
+See this document for detailed setup and troubleshooting tips: https://docs.google.com/document/d/1Q1ld8U40WpwkEG6oSTn0YFeIRsCWsoDMFMWuuPdepPA/edit
+
