@@ -1,7 +1,11 @@
 import json
 import numpy as np
+import sys
 from simulation.main import ExecuteSimulation as ex
 from db_interface import influxHandler
+
+print(sys.version)
+print(sys.executable)
 
 # numpy encoder
 class NpEncoder(json.JSONEncoder):
@@ -22,9 +26,9 @@ def first_N_Elements(arr, n):
     return arr2
 
 def run_sim_once():
+    return
     # run simulation 
     rawData = ex.GetSimulationData()
-
 
     shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
     shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
