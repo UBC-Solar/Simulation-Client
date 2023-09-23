@@ -16,7 +16,6 @@
             mode: 'text'
         })
         shell = pyshell
-
         // Run the python script, send the results to the main renderer
         shell.on('message', function(results) {
                 console.log("Background renderer received the following from the pyshell:\n" + results);
@@ -31,8 +30,7 @@
         window.port = e.ports[0]
         port.onmessage = (event) => {
             // handle message here
-            console.log("received msg from user thru main")
-            console.log(event.data)
+            console.log("received msg from user thru main:", event.data)
             shell.send(event.data)
         }
         window.port.start()
@@ -41,6 +39,5 @@
     // Send a message to the main renderer that the background listener
     // is ready for data
     ipcRenderer.send('BACKGROUND_READY');
-
 
 </script>

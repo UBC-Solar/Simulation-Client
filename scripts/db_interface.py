@@ -9,11 +9,6 @@ INFLUX_TOKEN = "thdvwNeSQIrO367krhsxI81v8APcNNdHGOBt1kEQqPJVXRBMyyHXgmf9_zHDmm0E
 INFLUX_BUCKET = "Test"
 INFLUX_ORG = "UBC Solar"
 
-# for record in record:
-#     print(record)
-    # if record["_field"] == "state_of_charge":
-    #     print(f'{record["_value"]}')
-
 class influxHandler:
     def __init__(self):
         self.client = influxdb_client.InfluxDBClient(url=INFLUX_URL, org=INFLUX_ORG, token=INFLUX_TOKEN)
