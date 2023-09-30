@@ -45,6 +45,7 @@ function createWindow() {
 		mainWindow.webContents.postMessage('port', null, [port1])
 	})
 }
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

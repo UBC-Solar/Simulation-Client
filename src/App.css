@@ -1,51 +1,87 @@
 .App {
   text-align: center;
   font-family: "Lucida Console", "Helvetica", sans-serif;
+  color: white;
+  background-color: #0b1929;
+}
+
+#leftRow::-webkit-scrollbar {
+  display: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#leftRow {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.container {
+  max-width: '100%'  //This will make container to take screen width
 }
 
 
-/* 
-Main Application Styles
-*/
+/*  Main Application Styles */
+/* ----------------------------------- */
+/* ----------------------------------- */
 
 #appRow {
   width: 100vw;
 }
 
 #leftRow {
-  background-color:  #f3f2f2;
+  /* background-color:  #f3f2f2; */
   height:100vh;
-  width: 500px;
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 #centerRow {
-  background-color: white;
+  /* background-color: white; */
+  padding-right: 25px;
+  padding-top: 2px;
 }
 
 #rightRow {
-  background-color: #f3f2f2;
+  /* background-color: #f3f2f2; */
   padding: 0px;
+  height: 100vh;
 }
 
-/* 
-SIMULATION ARGUMENTS SECTION
-*/
+/* SIMULATION ARGUMENTS SECTION */
+/* ----------------------------------- */
+/* ----------------------------------- */
 
 #fireSimButton {
+  margin-top: 7px;
   width: 150px;
   height: 50px;
+}
 
+#simArgSection {
+  margin-top: 20px;
+}
+
+.simArgDiv {
+  border: 1px solid grey;
+  padding: 10px;
+}
+
+.toggle {
+  color: white;
+  border: 1px solid grey;
 }
 
 
-/* 
-Stat Bar Styles
-*/
+/* Stat Bar Styles */
+/* ----------------------------------- */
+/* ----------------------------------- */
 
 .statUL {
   list-style-type: none;
   padding: 20px;
+  margin: auto;
+  width: 450px;
 }
 
 .statUL li {
@@ -55,7 +91,7 @@ Stat Bar Styles
   padding: 15px;
   padding-left: 0px;
   font-size: 15px;
-  background: white;
+  background-color: #022D36;
 
 }
 
@@ -65,10 +101,22 @@ Stat Bar Styles
   font-size: 20px;
 }
 
+.toggleStats {
+  color: white;
+  margin: auto;
+  border: 1px solid grey;
+  
+}
+
+.selectDiv {
+}
 
 
 
-/* Rechart Styling */
+/* Zoom Chart Styling */
+/* ----------------------------------- */
+/* ----------------------------------- */
+
 .recharts-wrapper {
   cursor: crosshair !important;
 }
@@ -94,9 +142,31 @@ Stat Bar Styles
 
 
 /* Map styling */
+/* ----------------------------------- */
+/* ----------------------------------- */
 
 #MapCont {
   height: 100vh;
   width: 100% ;
+  /* outline: 20px solid black; */
 }
 
+/* Bot Styling */
+/* ----------------------------------- */
+/* ----------------------------------- */
+
+.botListItem {
+  text-align: center;
+  padding: 10px;
+}
+
+.botUnorderedList {
+  list-style-type: none;
+  align-items: center;
+}
+
+.botInputText {
+  width: 75%;
+  height: 35px;
+  overflow-wrap: break-word;
+}
