@@ -11,7 +11,7 @@
         const { data } = args;
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
-            pythonPath: 'python',
+            pythonPath: path.join(__dirname, '..', 'venv', process.platform === "win32" ? 'Scripts' : 'bin', 'python'),
             args: [data],
             mode: 'text'
         })

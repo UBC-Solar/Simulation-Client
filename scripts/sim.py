@@ -1,7 +1,11 @@
 import json
+import sys
 import numpy as np
 from simulation.main import ExecuteSimulation as ex
 from db_interface import influxHandler
+
+print(sys.version)
+print(sys.executable)
 
 # numpy encoder
 class NpEncoder(json.JSONEncoder):
