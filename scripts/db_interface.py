@@ -15,7 +15,10 @@ class influxHandler:
         self.query_api = self.client.query_api()
 
     def get_SoC_data(self):
-        records = self.query_api.query_stream('from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "state_of_charge")')
+        return self.get_data(field="state_of_charge")
+
+    def get_data(self, field):
+        records = self.query_api.query_stream('from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "{field}")')
         vals = []
         for record in records:
             vals.append(record["_value"])
