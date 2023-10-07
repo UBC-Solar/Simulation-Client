@@ -11,33 +11,34 @@
         const { data } = args;
         // Tie the python shell to our script
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
-            // pythonPath: './venv/bin/python3',
-            pythonPath: 'python3',
+            pythonPath: path.join(__dirname, '..', 'venv', process.platform === "win32" ? 'Scripts' : 'bin', 'python'),
             args: [data],
             mode: 'text'
         })
         shell = pyshell
-
         // Run the python script, send the results to the main renderer
         shell.on('message', function(results) {
-                console.log("Background renderer received the following from the pyshell:\n" + results);
-                window.port.postMessage({message: results});
+            console.log("Background renderer received the following from the pyshell:\n" + results);
+            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+            window.port.postMessage({message: results})
+        });
+
+        shell.on('stderr', function(results) {
+            error_msg = "ERROR: Received the following error from the Python shell:\n" + results;
+            console.log(error_msg);
+            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: error_msg});
+            window.port.postMessage({message: error_msg})
         });
     });
 
     ipcRenderer.on('port', e => {
         // port recieved, make it globally available
-        console.log("Port end in hidden renderer recieved, mounting");
-        window.port = e.ports[0];
-        window.port.onmessage = (event) => {
+        console.log("Port end recieved, mounting")
+        window.port = e.ports[0]
+        port.onmessage = (event) => {
             // handle message here
-            console.log("Received msg from user thru main");
-            console.log(event.data);
-            shell.send(event.data);
-        }
-        window.port.onclose = () => {
-            console.log("Visible port end closed - requesting new port")
-            ipcRenderer.send('PORT_CLOSED');
+            console.log("received msg from user thru main:", event.data)
+            shell.send(event.data)
         }
         window.port.start()
     })
@@ -45,6 +46,5 @@
     // Send a message to the main renderer that the background listener
     // is ready for data
     ipcRenderer.send('BACKGROUND_READY');
-
 
 </script>

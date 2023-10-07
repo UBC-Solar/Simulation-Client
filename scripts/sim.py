@@ -1,4 +1,6 @@
 import json
+import sys
+from pathlib import Path
 import numpy as np
 import sys
 from simulation.main import ExecuteSimulation as ex
@@ -18,6 +20,7 @@ class NpEncoder(json.JSONEncoder):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
 
+influx_hd = influxHandler()
 
 # shortens arrays from simulation output  
 # must take elements from middle of array because otherwise values of interest area all zero
@@ -26,18 +29,14 @@ def first_N_Elements(arr, n):
     return arr2
 
 def run_sim_once():
-    return
+    return # Temporary early return - skipping sim run
     # run simulation 
     rawData = ex.GetSimulationData()
-
     shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
     shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
     shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
     shorter_DE = first_N_Elements(rawData[0].arrays[3], 400)
-
-    influx_hd = influxHandler()
     influx_data = json.loads(influx_hd.get_SoC_data())
-
 
     # Creating dictionary from SimulationResults
     data = {
@@ -52,15 +51,20 @@ def run_sim_once():
         "GIS_coordinates": rawData[1],
     }
 
-
     with open("data.json", "w") as outfile:
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
 while True:
     command = input()
-    print(f"(Python Script): Received the following input from hidden renderer: {command}")
-
+    # print(f"(Python Script): Received the following input from hidden renderer: {command}")
     if command == 'run_sim':
-        # TODO: May want to create a thread, and print on thread.join (I think thats the syntax)
+        # TODO: May want to create a thread
         run_sim_once()
         print("simulation_run_complete")
+    if command == 'get_most_recent':
+        fields = ['vehicle_velocity', 'state_of_charge']
+        results = influx_hd.get_most_recent(fields)
+        file_path = Path(__file__).parent / '..' / 'src' / 'most_recent_data.json'
+        with file_path.open('w') as f:
+            json.dump(results, f, indent=2)
+        print("most_recent_complete")

@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Stats from './Subcomponents/Stats.js'
 import Map from './Subcomponents/Map.js'
+import ValueTable from './Subcomponents/ValueTable.js'
 import SimArgs from './Subcomponents/SimArgs';
 import Bot from "./Subcomponents/Bot"
 
@@ -24,6 +25,7 @@ const ToggleButton = styled(MuiToggleButton)({
 });
 
 
+const mostRecentData = require('./most_recent_data.json');
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -42,6 +44,14 @@ class App extends Component {
       json: {
         empty: 100,
       },
+      currentValues: {
+        stateOfCharge: 0,
+        currentVelocity: 0
+      },
+      expectedValues: {
+        stateOfCharge: 0,
+        currentVelocity: 0
+      }
       simArgs: {
         granularity: 10,
         golang: "true",
@@ -62,12 +72,13 @@ class App extends Component {
       console.log("vis renderer port end received")
       window.port = e.ports[0]
       window.port.onmessage = (event) => {
-        console.log(event.data)
-          // handle message here
-      }
-      window.port.onclose = () => {
-          console.log("Hidden port end closed - requesting new port")
-          ipcRenderer.send('PORT_CLOSED');
+        console.log(event.data.message.toString())
+          // handle messages here
+
+          if (event.data.message.toString() == 'most_recent_complete') {
+            this.updateRecentValues()
+          }
+
       }
       window.port.start()
     })
@@ -99,6 +110,27 @@ class App extends Component {
     })
   }
 
+  requestRecentValues = () => {
+    if(window.port){
+      window.port.postMessage('get_most_recent');
+    } else {
+      console.log('No port detected!!')
+    }
+  }
+
+  updateRecentValues = () => {
+    const mostRecentJSON = JSON.parse(mostRecentData)
+    if (mostRecentJSON) {
+      this.setState({
+        currentValues: {
+          currentVelocity: mostRecentJSON['vehicle_velocity']['value'],
+          stateOfCharge: mostRecentJSON['state_of_charge']['value']
+        }
+      });
+    }
+  }
+
+=======
   handleChangeGo = (e, value) => {
     if(value) {
       const args = this.state.simArgs;
@@ -124,7 +156,7 @@ class App extends Component {
     console.log(typeof value === 'string' ? value.split(',') : value,);
   }
 
-  
+
   render () {
     const controlRightCol = {
       value: this.state.rightCol,
@@ -175,6 +207,11 @@ class App extends Component {
                   this.setState({simArgs: newArgs});
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
+              />
+                <ValueTable 
+                currentValues={this.state.currentValues} 
+                expectedValues={this.state.expectedValues} 
+                sendMostRecentMessage={this.requestRecentValues} 
               />
             </Col>
             <Col id="rightRow" xl={6}>

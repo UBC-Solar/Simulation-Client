@@ -4,15 +4,10 @@ import json
 
 # <----- InfluxDB constants ----->
 
-INFLUX_URL = "http://143.198.12.56:8086/"
-INFLUX_TOKEN = "thdvwNeSQIrO367krhsxI81v8APcNNdHGOBt1kEQqPJVXRBMyyHXgmf9_zHDmm0EUHz2YTrehTuvfay7I8L9ew=="
-INFLUX_BUCKET = "SimTest"
+INFLUX_URL = "https://telemetry.ubcsolar.com:8086"
+INFLUX_TOKEN = "fymtfc2M7NBRZ9KGeQ8i_9dZwMYgyr6_y5l97ejzlmrLdElBzlvX2VuZVtK00Od83736zWx4PJKreK9KERzWpQ=="
+INFLUX_BUCKET = "Test"
 INFLUX_ORG = "UBC Solar"
-
-# for record in record:
-#     print(record)
-    # if record["_field"] == "state_of_charge":
-    #     print(f'{record["_value"]}')
 
 class influxHandler:
     def __init__(self):
@@ -20,10 +15,22 @@ class influxHandler:
         self.query_api = self.client.query_api()
 
     def get_SoC_data(self):
-        self.records = self.query_api.query_stream('from(bucket:"Test") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "state_of_charge")')
-        vals = []
-        for record in self.records:
-            vals.append(record["_value"])
+        return self.get_data(field="state_of_charge")
 
-        json_obj = json.dumps(vals, indent=4)
-        return json_obj
+    def get_data(self, field):
+        records = self.query_api.query_stream('from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "{field}")')
+        vals = []
+        for record in records:
+            vals.append(record["_value"])
+        return json.dumps(vals, indent=2)
+
+    def get_most_recent(self, fields):
+        result = {}
+        for field in fields:
+            query = f'from(bucket:"{INFLUX_BUCKET}") |> range(start: -100d) |> filter(fn: (r) => r["_field"] == "{field}") |> last()'
+            records = self.query_api.query_stream(query)
+            for record in records:
+                result[field] = {"value": record['_value'],
+                                 "time": record['_time'].isoformat()
+                }
+        return json.dumps(result, indent=2)
