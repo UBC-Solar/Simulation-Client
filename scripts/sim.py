@@ -1,5 +1,6 @@
 import json
 import sys
+from pathlib import Path
 import numpy as np
 from simulation.main import ExecuteSimulation as ex
 from db_interface import influxHandler
@@ -53,18 +54,16 @@ def run_sim_once():
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
 while True:
-    try:
-        command = input()
-        # print(f"(Python Script): Received the following input from hidden renderer: {command}")
-        if command == 'run_sim':
-            # TODO: May want to create a thread
-            run_sim_once()
-            print("simulation_run_complete")
-        if command == 'get_most_recent':
-            fields = ['vehicle_velocity', 'state_of_charge']
-            results = influx_hd.get_most_recent(fields)
-            with open('most_recent_data.json', 'w', encoding='utf-8') as f:
-                json.dump(results, f, indent=2)
-            print("most_recent_complete")
-    except Exception as e:
-        print(e)
+    command = input()
+    # print(f"(Python Script): Received the following input from hidden renderer: {command}")
+    if command == 'run_sim':
+        # TODO: May want to create a thread
+        run_sim_once()
+        print("simulation_run_complete")
+    if command == 'get_most_recent':
+        fields = ['vehicle_velocity', 'state_of_charge']
+        results = influx_hd.get_most_recent(fields)
+        file_path = Path(__file__).parent / '..' / 'src' / 'most_recent_data.json'
+        with file_path.open('w') as f:
+            json.dump(results, f, indent=2)
+        print("most_recent_complete")

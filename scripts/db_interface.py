@@ -4,8 +4,8 @@ import json
 
 # <----- InfluxDB constants ----->
 
-INFLUX_URL = "http://143.198.12.56:8086/"
-INFLUX_TOKEN = "thdvwNeSQIrO367krhsxI81v8APcNNdHGOBt1kEQqPJVXRBMyyHXgmf9_zHDmm0EUHz2YTrehTuvfay7I8L9ew=="
+INFLUX_URL = "https://telemetry.ubcsolar.com:8086"
+INFLUX_TOKEN = "fymtfc2M7NBRZ9KGeQ8i_9dZwMYgyr6_y5l97ejzlmrLdElBzlvX2VuZVtK00Od83736zWx4PJKreK9KERzWpQ=="
 INFLUX_BUCKET = "Test"
 INFLUX_ORG = "UBC Solar"
 

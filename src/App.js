@@ -9,6 +9,7 @@ import {Row, Col, Container} from 'react-bootstrap';
 
 import Slider from '@mui/material/Slider';
 
+const mostRecentData = require('./most_recent_data.json');
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -48,8 +49,13 @@ class App extends Component {
       console.log("vis renderer port end received")
       window.port = e.ports[0]
       window.port.onmessage = (event) => {
-        console.log(event.data)
-          // handle message here
+        console.log(event.data.message.toString())
+          // handle messages here
+
+          if (event.data.message.toString() == 'most_recent_complete') {
+            this.updateRecentValues()
+          }
+
       }
       window.port.start()
     })
@@ -86,6 +92,18 @@ class App extends Component {
       window.port.postMessage('get_most_recent');
     } else {
       console.log('No port detected!!')
+    }
+  }
+
+  updateRecentValues = () => {
+    const mostRecentJSON = JSON.parse(mostRecentData)
+    if (mostRecentJSON) {
+      this.setState({
+        currentValues: {
+          currentVelocity: mostRecentJSON['vehicle_velocity']['value'],
+          stateOfCharge: mostRecentJSON['state_of_charge']['value']
+        }
+      });
     }
   }
 
