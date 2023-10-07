@@ -2,6 +2,7 @@ import json
 import sys
 from pathlib import Path
 import numpy as np
+import sys
 from simulation.main import ExecuteSimulation as ex
 from db_interface import influxHandler
 

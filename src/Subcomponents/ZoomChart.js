@@ -112,16 +112,18 @@ export default function ZoomChart(props) {
           type="number"
           dataKey="x"
           domain={["auto", "auto"]}
+          stroke="white"
         />
         <YAxis
           type="number"
           dataKey="y"
           domain={["auto", "auto"]}
           allowDecimals={true}
+          stroke="white"
         />
         <Line 
             dataKey='y'
-            stroke="#8884d8"
+            stroke="white"
             animationDuration={300}
         />
 
