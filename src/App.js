@@ -51,7 +51,7 @@ class App extends Component {
       expectedValues: {
         stateOfCharge: 0,
         currentVelocity: 0
-      }
+      },
       simArgs: {
         granularity: 10,
         golang: "true",
@@ -130,7 +130,6 @@ class App extends Component {
     }
   }
 
-=======
   handleChangeGo = (e, value) => {
     if(value) {
       const args = this.state.simArgs;
