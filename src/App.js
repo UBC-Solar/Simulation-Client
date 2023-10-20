@@ -105,7 +105,8 @@ class App extends Component {
   
   startSim = () => {
     console.log("RE-RUNNING SIMULATION")
-    window.port.postMessage('run_sim')
+    console.log(this.state.simArgs)
+    window.port.postMessage('run_sim' + ' ' + JSON.stringify(this.state.simArgs)) // send sim args as a json string as a part of the command
     this.setState({
       loading: true,
       displayMap: false,
