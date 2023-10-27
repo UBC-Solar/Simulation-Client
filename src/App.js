@@ -198,18 +198,14 @@ class App extends Component {
         <Container fluid id="appContainer">
           <Row id='appRow'>
             <Col id="leftRow" xl={4}>
-              <Row>
-                <Col>
-                  <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
-                </Col>
-                <Col>
-                  <ToggleButtonGroup id="toggleStats" {...controlRightCol}> 
-                    <ToggleButton value="stats"><div style={{color: 'white', 'width':'100px'}}>Graphs</div></ToggleButton>
-                    <ToggleButton value="map"><div style={{color: 'white', 'width':'100px'}}>Map</div></ToggleButton>
-                  </ToggleButtonGroup>
-                </Col>
-              </Row>
-              
+                <ToggleButtonGroup className="toggleStats" color="primary" {...controlRightCol}> 
+                  <ToggleButton value="stats"><div style={{color: 'white', 'width':'100px'}}>Graphs</div></ToggleButton>
+                  <ToggleButton value="bot"><div style={{color: 'white', 'width':'100px'}}>Bot</div></ToggleButton>
+                </ToggleButtonGroup>
+                {statProvider()}
+            </Col>
+            <Col id="centerRow" xl={2} style={{overflowX: 'auto'}}>
+              <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
               <SimArgs 
                 mapGran={this.state.mapGranularity} 
                 args={this.state.simArgs} 
@@ -221,7 +217,7 @@ class App extends Component {
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
-              <ValueTable 
+                <ValueTable
                 currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 
