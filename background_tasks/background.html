@@ -19,14 +19,14 @@
         // Run the python script, send the results to the main renderer
         shell.on('message', function(results) {
             console.log("Background renderer received the following from the pyshell:\n" + results);
-            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
+            // ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: results});
             window.port.postMessage({message: results})
         });
 
         shell.on('stderr', function(results) {
             error_msg = "ERROR: Received the following error from the Python shell:\n" + results;
             console.log(error_msg);
-            ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: error_msg});
+            // ipcRenderer.send('MESSAGE_FROM_BACKGROUND', {message: error_msg});
             window.port.postMessage({message: error_msg})
         });
     });
