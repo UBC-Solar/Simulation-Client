@@ -5,8 +5,6 @@ import pandas as pd
 import random
 import time
 from influxdb_client.client.write_api import SYNCHRONOUS
-from simulation.run_simulation import run_unoptimized_and_export
-
 
 
 def row_operation(row):
