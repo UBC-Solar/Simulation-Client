@@ -17,7 +17,7 @@
 }
 
 .container {
-  max-width: '100%'  //This will make container to take screen width
+  max-width: '100%';  /* This will make container to take screen width */
 }
 
 
@@ -38,8 +38,12 @@
 
 #centerRow {
   /* background-color: white; */
-  padding-right: 25px;
+  /* padding-right: 25px; */
   padding-top: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 2vh;
 }
 
 #rightRow {
@@ -48,18 +52,20 @@
   height: 100vh;
 }
 
+
+
 /* SIMULATION ARGUMENTS SECTION */
 /* ----------------------------------- */
 /* ----------------------------------- */
 
 #fireSimButton {
-  margin-top: 7px;
+  margin-top: 10px;
   width: 150px;
   height: 50px;
 }
 
 #simArgSection {
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .simArgDiv {
@@ -112,6 +118,12 @@
 }
 
 
+.graph_card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /* Zoom Chart Styling */
 /* ----------------------------------- */
@@ -131,14 +143,13 @@
 
 .plot-container {
   /* position: relative; */
+  /* padding: 20px; */
 }
 
 .chartButton {
   left: 200px;
   z-index: 1;
 }
-
-
 
 
 /* Map styling */

@@ -57,7 +57,7 @@ def run_sim_once():
 while True:
     command = input()
     # print(f"(Python Script): Received the following input from hidden renderer: {command}")
-    if command == 'run_sim':
+    if command.split(' ')[0] == 'run_sim': # expected: command = "run_sim" + " " + JSON String of SimArgs from front-end
         # TODO: May want to create a thread
         run_sim_once()
         print("simulation_run_complete")

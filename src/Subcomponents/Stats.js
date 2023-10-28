@@ -26,9 +26,9 @@ class Stats extends Component {
                                 <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"]) +" km"}</li>
                                 <li className="timeLi">{"time taken: "} <br/> {secondsToDhms(this.props.json["time_taken"])}</li>
                                 <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>
-                                <li>{this.createGraph("speed_kmh")}</li>
-                                <li>{this.createGraph("distances")}</li>
-                                <li>{this.createGraph("state_of_charge")}</li>
+                                <li className='graph_card'>{this.createGraph("speed_kmh")}</li>
+                                <li className='graph_card'>{this.createGraph("distances")}</li>
+                                <li className='graph_card'>{this.createGraph("state_of_charge")}</li>
                                 {/* <li>{this.createGraph("influx_soc")}</li> */}
                             </ul>
 
