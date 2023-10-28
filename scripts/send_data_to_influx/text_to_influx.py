@@ -1,7 +1,7 @@
 
 import influxdb_client
 import time
-from simulation.run_simulation import run_unoptimized_and_export
+
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client import InfluxDBClient, Point
 
@@ -35,17 +35,19 @@ def main():
         lines = file.readlines()
 
     for line in lines:
-        data_point = Point("Text File Test Value").tag("Fake Telemetetry Data", "Telemetry Values")
+        data_point = Point("FakeTelValue").tag("Fake Telemetetry Data", "Telemetry Values")
 
         parsed_line = parse_line(line)
         data_line = list(parsed_line.items())
         fields = {}
         for element in data_line:
             key, value = element
-            if key == "Timestamp":
-                data_point.time(value)
-            else:
-                data_point.field(key, value)
+            # if key == "Timestamp":
+            #     data_point.time(value)
+            #     print('skipping timestamp addition')
+            # else:
+            #     data_point.field(key, value)
+            data_point.field(key, value)
         print(data_point)
         write_api.write(bucket=bucket, record=data_point)
         time.sleep(3)
