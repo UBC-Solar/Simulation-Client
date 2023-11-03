@@ -170,7 +170,7 @@ class App extends Component {
       value: this.state.rightCol,
       onChange: (e) => {
         if(this.state.rightCol === 'stats') {
-          this.setState({rightCol:'bot'})
+          this.setState({rightCol:'map'})
         } else {
           this.setState({rightCol: 'stats'})
         }
@@ -189,7 +189,7 @@ class App extends Component {
           />
         );
       } else {
-        return(<Bot />);
+        return( <Map granularity={this.state.mapGranularity} display={this.state.displayMap} json={this.state.json} />);
       }
     }
     return (
@@ -197,14 +197,18 @@ class App extends Component {
         <Container fluid id="appContainer">
           <Row id='appRow'>
             <Col id="leftRow" xl={4}>
-                <ToggleButtonGroup className="toggleStats" color="primary" {...controlRightCol}> 
-                  <ToggleButton value="stats"><div style={{color: 'white', 'width':'100px'}}>Graphs</div></ToggleButton>
-                  <ToggleButton value="bot"><div style={{color: 'white', 'width':'100px'}}>Bot</div></ToggleButton>
-                </ToggleButtonGroup>
-                {statProvider()}
-            </Col>
-            <Col id="centerRow" xl={2}>
-              <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
+              <Row>
+                <Col>
+                  <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
+                </Col>
+                <Col>
+                  <ToggleButtonGroup id="toggleStats" {...controlRightCol}> 
+                    <ToggleButton value="stats"><div style={{color: 'white', 'width':'100px'}}>Graphs</div></ToggleButton>
+                    <ToggleButton value="map"><div style={{color: 'white', 'width':'100px'}}>Map</div></ToggleButton>
+                  </ToggleButtonGroup>
+                </Col>
+              </Row>
+              
               <SimArgs 
                 mapGran={this.state.mapGranularity} 
                 args={this.state.simArgs} 
@@ -216,14 +220,14 @@ class App extends Component {
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
-                <ValueTable 
+              <ValueTable 
                 currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 
               />
             </Col>
-            <Col id="rightRow" xl={6}>
-              <Map granularity={this.state.mapGranularity} display={this.state.displayMap} json={this.state.json} />
+            <Col id="rightRow" xl={8}>
+             {statProvider()}
             </Col>
           </Row>
         </Container>
