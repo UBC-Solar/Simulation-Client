@@ -27,7 +27,7 @@ def row_operation(row):
 
     # Perform your operation on the row here
     keys = row.index
-    p = influxdb_client.Point("sensor data").tag("TestData", "CarRunValue")
+    p = influxdb_client.Point("FakeTelValue").tag("Fake Telemetetry Data", "Telemetry Values")
     for key in keys:
         p.field(key, row[key])
     write_api.write(bucket=bucket, org=org, record=p)
