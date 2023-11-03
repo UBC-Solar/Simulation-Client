@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 import numpy as np
 import sys
-from simulation.main import ExecuteSimulation as ex
+from simulation.run_simulation import run_unoptimized_and_export
 from db_interface import influxHandler
 
 print(sys.version)
@@ -28,7 +28,10 @@ def first_N_Elements(arr, n):
     arr2 = arr[0::n].copy()
     return arr2
 
-def run_sim_once():
+def run_sim_once(sim_args_dict):
+    sim_results = run_unoptimized_and_export();
+    with open("test.json", "w") as outfile:
+        json.dump(sim_results, outfile)
     return # Temporary early return - skipping sim run
     # run simulation 
     rawData = ex.GetSimulationData()
@@ -59,7 +62,8 @@ while True:
     # print(f"(Python Script): Received the following input from hidden renderer: {command}")
     if command.split(' ')[0] == 'run_sim': # expected: command = "run_sim" + " " + JSON String of SimArgs from front-end
         # TODO: May want to create a thread
-        run_sim_once()
+        sim_args_dict = json.loads(command.split(' ')[1]) # Dictionary/JSON of simulation args recieved from front-end 
+        run_sim_once(sim_args_dict)
         print("simulation_run_complete")
     if command == 'get_most_recent':
         fields = ['vehicle_velocity', 'state_of_charge']
