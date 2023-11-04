@@ -27,7 +27,7 @@ class ValueTable extends Component {
                 {Object.keys(currentValues).map(key => (
                   <tr key={key}>
                     <td>{key}</td>
-                    <td>{Math.round(currentValues[key] * 1000) / 1000}</td> {/* Round to 4 decimal places */}
+                    <td>{Math.round(currentValues[key]*1000)/1000}</td>{/* Round to 4 decimal places */}
                     <td>{expectedValues[key]}</td>
                   </tr>
                 ))}

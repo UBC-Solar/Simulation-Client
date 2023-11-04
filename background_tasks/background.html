@@ -39,6 +39,10 @@
             console.log("received msg from user thru main:", event.data)
             shell.send(event.data)
         }
+        window.port.onclose = () => {
+            console.log("Detected port closing in hidden renderer - requesting new port")
+            ipcRenderer.send('PORT_REQUEST');
+        }
         window.port.start()
     })
 

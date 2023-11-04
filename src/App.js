@@ -77,7 +77,7 @@ class App extends Component {
         }
 
         if (event.data.message.toString() == 'simulation_run_complete'){
-          const sim_result = JSON.parse(JSON.string(simDataJSON))
+          const sim_result = JSON.parse(JSON.stringify(simDataJSON))
           this.setState({
             json: sim_result,
           })
@@ -212,8 +212,7 @@ class App extends Component {
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
-                <ValueTable
-                currentValues={this.state.currentValues} 
+                <ValueTable currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 
               />

@@ -29,9 +29,9 @@ def first_N_Elements(arr, n):
     return arr2
 
 def run_sim_once():
+    return # Temporary early return - skipping sim run
     # run simulation 
     rawData = ex.GetSimulationData()
-    return # Temporary early return - skipping sim run
     shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
     shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
     shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
