@@ -1,0 +1,48 @@
+ID: 0x1A53, Data: 0x0C6D, Timestamp: 2023-10-19T12:30:00Z, Length: 8
+Lat: 38.1897, Lon: 91.4263, Sat: 15, Alt: 2087, Timestamp: 2023-10-19T12:40:00Z
+Imu_type: 103, Timestamp: 2023-10-19T12:50:00Z, dim: 10, data: 0x1952
+ID: 0x2B7D, Data: 0x1F4A, Timestamp: 2023-10-19T12:33:15Z, Length: 6
+Lat: 38.1923, Lon: 91.4278, Sat: 14, Alt: 2089, Timestamp: 2023-10-19T12:41:30Z
+Imu_type: 105, Timestamp: 2023-10-19T12:52:45Z, dim: 12, data: 0x3A81
+ID: 0x3C8E, Data: 0x2D7F, Timestamp: 2023-10-19T12:35:30Z, Length: 7
+Lat: 38.1948, Lon: 91.4295, Sat: 13, Alt: 2092, Timestamp: 2023-10-19T12:43:15Z
+Imu_type: 110, Timestamp: 2023-10-19T12:55:00Z, dim: 14, data: 0x50B6
+ID: 0x4DFA, Data: 0x4E1C, Timestamp: 2023-10-19T12:38:45Z, Length: 8
+Lat: 38.1971, Lon: 91.4312, Sat: 12, Alt: 2095, Timestamp: 2023-10-19T12:45:30Z
+Imu_type: 115, Timestamp: 2023-10-19T12:57:15Z, dim: 16, data: 0x689D
+ID: 0x5E15, Data: 0x6A3F, Timestamp: 2023-10-19T12:42:00Z, Length: 7
+Lat: 38.1995, Lon: 91.4330, Sat: 11, Alt: 2097, Timestamp: 2023-10-19T13:00:00Z
+Imu_type: 118, Timestamp: 2023-10-19T13:00:00Z, dim: 19, data: 0x7D30
+ID: 0x6F2B, Data: 0x8B74, Timestamp: 2023-10-19T12:44:15Z, Length: 6
+Lat: 38.2019, Lon: 91.4349, Sat: 10, Alt: 2098, Timestamp: 2023-10-19T13:05:15Z
+Imu_type: 122, Timestamp: 2023-10-19T13:02:30Z, dim: 22, data: 0x92E7
+ID: 0x8C4E, Data: 0xADAF, Timestamp: 2023-10-19T12:46:30Z, Length: 8
+Lat: 38.2043, Lon: 91.4368, Sat: 9, Alt: 2099, Timestamp: 2023-10-19T13:10:30Z
+Imu_type: 126, Timestamp: 2023-10-19T13:05:45Z, dim: 25, data: 0xAC16
+ID: 0x9D63, Data: 0xCEB5, Timestamp: 2023-10-19T12:49:45Z, Length: 9
+Lat: 38.2067, Lon: 91.4387, Sat: 8, Alt: 2100, Timestamp: 2023-10-19T13:15:45Z
+Imu_type: 130, Timestamp: 2023-10-19T13:09:00Z, dim: 28, data: 0xCDC5
+ID: 0xAF7F, Data: 0xE0EA, Timestamp: 2023-10-19T12:52:00Z, Length: 7
+Lat: 38.2091, Lon: 91.4406, Sat: 7, Alt: 2101, Timestamp: 2023-10-19T13:20:00Z
+Imu_type: 135, Timestamp: 2023-10-19T13:12:15Z, dim: 31, data: 0xE6F8
+ID: 0xC0A4, Data: 0x1120, Timestamp: 2023-10-19T12:54:15Z, Length: 8
+Lat: 38.2115, Lon: 91.4425, Sat: 6, Alt: 2102, Timestamp: 2023-10-19T13:25:15Z
+Imu_type: 140, Timestamp: 2023-10-19T13:15:30Z, dim: 34, data: 0xFF01
+ID: 0xD1B9, Data: 0x134E, Timestamp: 2023-10-19T12:56:30Z, Length: 9
+Lat: 38.2139, Lon: 91.4444, Sat: 5, Alt: 2103, Timestamp: 2023-10-19T13:30:30Z
+Imu_type: 145, Timestamp: 2023-10-19T13:18:45Z, dim: 37, data: 0x112A
+ID: 0xE2CE, Data: 0x1576, Timestamp: 2023-10-19T12:58:45Z, Length: 7
+Lat: 38.2163, Lon: 91.4463, Sat: 4, Alt: 2104, Timestamp: 2023-10-19T13:35:45Z
+Imu_type: 150, Timestamp: 2023-10-19T13:22:00Z, dim: 40, data: 0x13F3
+ID: 0xF3E3, Data: 0x179D, Timestamp: 2023-10-19T13:01:00Z, Length: 8
+Lat: 38.2187, Lon: 91.4482, Sat: 3, Alt: 2105, Timestamp: 2023-10-19T13:40:00Z
+Imu_type: 155, Timestamp: 2023-10-19T13:25:15Z, dim: 43, data: 0x16CC
+ID: 0x103F, Data: 0x19C5, Timestamp: 2023-10-19T13:03:15Z, Length: 7
+Lat: 38.2211, Lon: 91.4501, Sat: 2, Alt: 2106, Timestamp: 2023-10-19T13:45:15Z
+Imu_type: 160, Timestamp: 2023-10-19T13:28:30Z, dim: 46, data: 0x1995
+ID: 0x214A, Data: 0x1BEA, Timestamp: 2023-10-19T13:05:30Z, Length: 6
+Lat: 38.2235, Lon: 91.4520, Sat: 1, Alt: 2107, Timestamp: 2023-10-19T13:50:30Z
+Imu_type: 165, Timestamp: 2023-10-19T13:31:45Z, dim: 49, data: 0x1C5E
+ID: 0x325F, Data: 0x1E11, Timestamp: 2023-10-19T13:07:45Z, Length: 8
+Lat: 38.2259, Lon: 91.4539, Sat: 0, Alt: 2108, Timestamp: 2023-10-19T13:55:45Z
+Imu_type: 170, Timestamp: 2023-10-19T13:35:00Z, dim: 52, data: 0x1E27

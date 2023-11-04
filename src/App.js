@@ -26,6 +26,7 @@ const ToggleButton = styled(MuiToggleButton)({
 
 
 const mostRecentData = require('./most_recent_data.json');
+const telemetryDataJSON  = require('./telemetry_data.json');
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -74,11 +75,12 @@ class App extends Component {
       window.port.onmessage = (event) => {
         console.log(event.data.message.toString())
           // handle messages here
-
           if (event.data.message.toString() == 'most_recent_complete') {
             this.updateRecentValues()
           }
-
+          if(event.data.message.toString() == 'telemetry_data_queried') {
+            this.processTelemetryValues()
+          }
       }
       window.port.start()
     })
@@ -129,6 +131,11 @@ class App extends Component {
         }
       });
     }
+  }
+
+  processTelemetryValues = () => {
+    const telemetryData = JSON.parse(telemetryDataJSON);
+    console.log(telemetryData);
   }
 
   handleChangeGo = (e, value) => {
