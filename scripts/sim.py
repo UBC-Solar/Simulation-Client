@@ -4,7 +4,7 @@ from pathlib import Path
 import time
 import numpy as np
 import sys
-from simulation.main import ExecuteSimulation as ex
+from simulation.run_simulation import run_unoptimized_and_export
 from db_interface import influxHandler
 from Influx_Query import telemetry_query
 
@@ -31,29 +31,54 @@ def first_N_Elements(arr, n):
     arr2 = arr[0::n].copy()
     return arr2
 
-def run_sim_once():
-    return # Temporary early return - skipping sim run
-    # run simulation 
-    rawData = ex.GetSimulationData()
-    shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
-    shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
-    shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
-    shorter_DE = first_N_Elements(rawData[0].arrays[3], 400)
-    influx_data = json.loads(influx_hd.get_SoC_data())
+# Runs simulation once with custom simulation params
+def run_sim_once(sim_args_dict):
+    """
+    Run unoptimized simulation with simulation ars and export results. Refer to src/App.js to find simArgs.
+    Exported results (sim_results) gets a list of the default return values for simulation results. 
+    Those results are...
 
-    # Creating dictionary from SimulationResults
+    default_values_keys = ["speed_kmh"(arr), "distances"(arr), "state_of_charge"(arr), "delta_energy"(arr), 
+                          "solar_irradiances"(arr), "wind_speeds"(arr), "gis_route_elevations_at_each_tick"(arr), 
+                          "cloud_covers", "distance_travelled"(float), "time_taken"(int), "final_soc"(float)]
+    
+    Remember sim_results is a list not a dict, so parsing requires integer indexing and not using keys. Index order 
+    is the same order as the list above.
+
+    """
+    # Run Simulation
+    sim_results = run_unoptimized_and_export(
+                        values = ["speed_kmh", "distances", "state_of_charge", "delta_energy", "solar_irradiances",
+                                "wind_speeds", "gis_route_elevations_at_each_tick", "cloud_covers",
+                                "distance_travelled", "time_taken", "final_soc", "path_coordinates"], 
+                        granularity = sim_args_dict["granularity"], 
+                        golang = sim_args_dict["golang"])
+
+    # Parse Simulation results 
+    distance_travelled = sim_results[8]
+    time_taken = sim_results[9]
+    final_soc = sim_results[10]
+    GIS_coordinates = sim_results[11]
+    speed = first_N_Elements(sim_results[0], 400)
+    distances = first_N_Elements(sim_results[1], 400)
+    state_of_charge = first_N_Elements(sim_results[2], 400)
+    delta_energy = first_N_Elements(sim_results[3], 400)
+    # influx_data = json.loads(influx_hd.get_SoC_data())
+
+    # Creating dictionary from Simulation Results
     data = {
-        "distance_travelled": rawData[0].distance_travelled,
-        "time_taken": rawData[0].time_taken,
-        "final_soc": rawData[0].final_soc,
-        "speed_kmh": shorter_speed,
-        "distances": shorter_distance,
-        "state_of_charge": shorter_SOC,
-        "delta_energy": shorter_DE,
-        "influx_soc": influx_data,
-        "GIS_coordinates": rawData[1],
+        "distance_travelled": distance_travelled,
+        "time_taken": time_taken,
+        "final_soc": final_soc,
+        "speed_kmh": speed,
+        "distances": distances,
+        "state_of_charge": state_of_charge,
+        "delta_energy": delta_energy,
+        # "influx_soc": influx_data,
+        "GIS_coordinates": GIS_coordinates
     }
 
+    # Write results to data JSON file
     with open("data.json", "w") as outfile:
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
@@ -74,7 +99,8 @@ while True:
     # print(f"(Python Script): Received the following input from hidden renderer: {command}")
     if command.split(' ')[0] == 'run_sim': # expected: command = "run_sim" + " " + JSON String of SimArgs from front-end
         # TODO: May want to create a thread
-        run_sim_once()
+        sim_args_dict = json.loads(command.split(' ')[1]) # Dictionary/JSON of simulation args recieved from front-end 
+        run_sim_once(sim_args_dict)
         print("simulation_run_complete")
     if command == 'get_most_recent':
         fields = ['vehicle_velocity', 'state_of_charge']
