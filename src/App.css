@@ -86,24 +86,22 @@
 /* ----------------------------------- */
 /* ----------------------------------- */
 
-.statUL {
-  list-style-type: none;
+#statDiv {
   padding: 20px;
   margin: auto;
-  width: 450px;
+  width: 85%;
+  height: 90vh;
+
 }
 
-.statUL li {
+#graphBox {
   outline-style: solid;
   margin: 10px;
-  margin-left: 0px;
-  padding: 15px;
-  padding-left: 0px;
+  padding: 20px;
   font-size: 15px;
   background-color: #022D36;
-
+  height: 100%;
 }
-
 
 .graphTitle {
   font-weight: bold;

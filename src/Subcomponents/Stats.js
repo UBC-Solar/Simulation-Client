@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ZoomChart from './ZoomChart'
+import Graph from './Graph'
 import secondsToDhms from "../HelperFunctions/TimeString"
 
 import '../App.css';
@@ -22,15 +23,9 @@ class Stats extends Component {
                 if (this.props.json["empty"] === undefined){
                     return(
                         <div id="statDiv">
-                            <ul className="statUL">
-                                <li>{"distance traveled: " + Math.round(this.props.json["distance_travelled"]) +" km"}</li>
-                                <li className="timeLi">{"time taken: "} <br/> {secondsToDhms(this.props.json["time_taken"])}</li>
-                                <li>{"final SOC: " + Math.round(this.props.json["final_soc"])}</li>
-                                <li className='graph_card'>{this.createGraph("speed_kmh")}</li>
-                                <li className='graph_card'>{this.createGraph("distances")}</li>
-                                <li className='graph_card'>{this.createGraph("state_of_charge")}</li>
-                                {/* <li>{this.createGraph("influx_soc")}</li> */}
-                            </ul>
+                            <div id="graphBox">
+                                <Graph data={this.props.json}/>
+                            </div>
 
                         </div>
                     );
