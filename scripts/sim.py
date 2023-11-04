@@ -79,7 +79,7 @@ while True:
     if command == 'get_most_recent':
         fields = ['vehicle_velocity', 'state_of_charge']
         results = influx_hd.get_most_recent(fields)
-        file_path = Path(__file__).parent / '..' / 'src' / 'most_recent_data.json'
+        file_path = Path(__file__).parent / '..' / 'most_recent_data.json'
         with file_path.open('w') as f:
             json.dump(results, f, indent=2)
         print("most_recent_complete")

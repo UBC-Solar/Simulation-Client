@@ -20,12 +20,11 @@ const ToggleButton = styled(MuiToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
     color: "white",
     backgroundColor: '#022D36',
-
   }
 });
 
-
-const mostRecentData = require('./most_recent_data.json');
+const simDataJSON = require('data.json');
+const mostRecentData = require('most_recent_data.json');
 const telemetryDataJSON  = require('./telemetry_data.json');
 
 const electron = window.require('electron');
@@ -64,23 +63,40 @@ class App extends Component {
   componentDidMount(){
     // Sets up an event listener which reads 
     // the data set from background process
-    ipcRenderer.on('MESSAGE_FROM_BACKGROUND_VIA_MAIN', (event, args) => {
-			console.log(args);
-		});
     
     ipcRenderer.on('port', e => {
       // port recieved, make it globally available
       console.log("vis renderer port end received")
       window.port = e.ports[0]
       window.port.onmessage = (event) => {
+
         console.log(event.data.message.toString())
-          // handle messages here
-          if (event.data.message.toString() == 'most_recent_complete') {
-            this.updateRecentValues()
-          }
-          if(event.data.message.toString() == 'telemetry_data_queried') {
-            this.processTelemetryValues()
-          }
+
+        // handle messages here
+
+        if (event.data.message.toString() == 'most_recent_complete') {
+          this.updateRecentValues()
+        }
+
+        if (event.data.message.toString() == 'simulation_run_complete'){
+          const sim_result = JSON.parse(JSON.stringify(simDataJSON))
+          this.setState({
+            json: sim_result,
+          })
+          this.setState({
+            loading: false,
+            displayMap: true
+          })
+        }
+
+        if(event.data.message.toString() == 'telemetry_data_queried') {
+          this.processTelemetryValues()
+        }
+
+      }
+      window.port.onclose = () => {
+        console.log("Hidden port end closed - requesting new port")
+        ipcRenderer.send('PORT_REQUEST');
       }
       window.port.start()
     })
@@ -91,21 +107,12 @@ class App extends Component {
       })
       this.setState({ hasStartedBackground: true })
     }
-
-    ipcRenderer.on('JSON_DATA', (event, args) => {
-      this.setState({
-        json: args,
-      })
-      this.setState({
-        loading: false,
-        displayMap: false
-      })
-    })
   }
   
   startSim = () => {
     console.log("RE-RUNNING SIMULATION")
     console.log(this.state.simArgs)
+    // TODO: modify this postMessage 
     window.port.postMessage('run_sim' + ' ' + JSON.stringify(this.state.simArgs)) // send sim args as a json string as a part of the command
     this.setState({
       loading: true,
@@ -215,8 +222,7 @@ class App extends Component {
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
-                <ValueTable
-                currentValues={this.state.currentValues} 
+                <ValueTable currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 
               />
