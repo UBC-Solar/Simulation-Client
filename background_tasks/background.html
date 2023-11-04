@@ -13,7 +13,7 @@
         let pyshell = new PythonShell(path.join(__dirname, '/../scripts/sim.py'), {
             pythonPath: path.join(__dirname, '..', 'venv', process.platform === "win32" ? 'Scripts' : 'bin', 'python'),
             args: [data],
-            mode: 'text'
+            mode: 'json'
         })
         shell = pyshell
         // Run the python script, send the results to the main renderer
@@ -28,6 +28,18 @@
             // todo: Do we need to send these errors through the port??
             window.port.postMessage({message: error_msg})
         });
+
+        shell.on('error', function(results) {
+            // TODO: detemine how we handle this
+            // Error is emitted when the shell cannot be spawned, killed, or a message cannot be sent
+        })
+
+        shell.on('pythonError', function(results) {
+            // TODO: detemine how we handle this
+            // pythonError is emitted when the process terminates with a non-zero code
+            // Could also more generally listen for the 'close' event which emits on close,
+            // regardless of code.
+        })
     });
 
     ipcRenderer.on('port', e => {
