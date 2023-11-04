@@ -7,7 +7,7 @@ export default function Graph(props) {
     const createGraph = async () => {
         // data array will store datapoints for the selected graphs
         let data = [];
-        let colors = ['#fcba03', "#6b03fc", "#cc0808", "#3bc708"]
+        let colors = ['#fcba03', "#9405fa", "#cc0808", "#3bc708"]
         // initializing data array to have the correct size and a tick value at each point.
         // TODO: Data tick values are not the corresponding simulation output ticks since simulation outputs have been shortened.
         props.data['speed_kmh'].forEach((value, tick) => {
@@ -47,6 +47,7 @@ export default function Graph(props) {
         
         let graphNumber = 0;
         graphList.forEach((dataName) => {
+            var color = colors[graphNumber];
             var y = d3.scaleLinear().range([height, 0]);
             y.domain([d3.min(data, (d) => {return d[dataName]}), d3.max(data, (d) => { return d[dataName]; })]);
             // Append the y2-axis to the far left and shift it over some distance
@@ -55,7 +56,7 @@ export default function Graph(props) {
                 .call(d3.axisLeft(y));
     
             YAxis.selectAll("text")
-                .style("fill", "#fcba03");
+                .style("fill", color);
             
                 // add the Line
             var valueLine = d3.line()
@@ -65,7 +66,7 @@ export default function Graph(props) {
                 .data([data])
                 .attr("class", "line")
                 .attr("fill", "none")
-                .attr("stroke", "#fcba03")
+                .attr("stroke", color)
                 .attr("stroke-width", 1.5)
                 .attr("d", valueLine)
             graphNumber++;
