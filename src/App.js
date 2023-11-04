@@ -54,7 +54,7 @@ class App extends Component {
       },
       simArgs: {
         granularity: 10,
-        golang: "true",
+        golang: true,
         optimize: "timeTaken",
       },
     };

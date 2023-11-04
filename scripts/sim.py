@@ -28,20 +28,25 @@ def first_N_Elements(arr, n):
     arr2 = arr[0::n].copy()
     return arr2
 
+# Runs simulation once with custom simulation params
 def run_sim_once(sim_args_dict):
-    # default_values = ["speed_kmh", "distances", "state_of_charge", "delta_energy", "solar_irradiances",
-    #                       "wind_speeds", "gis_route_elevations_at_each_tick", "cloud_covers",
-    #                       "distance_travelled", "time_taken", "final_soc"]
+    """
+    Run unoptimized simulation with simulation ars and export results. Refer to src/App.js to find simArgs.
+    Exported results (sim_results) gets a list of the default return values for simulation results. 
+    Those results are...
 
-
-    print("inside run sim once")
-    sim_results = run_unoptimized_and_export();
-
-    print("done running sim")
-    print(sim_results)
-    print(type(sim_results), len(sim_results))
+    default_values_keys = ["speed_kmh"(arr), "distances"(arr), "state_of_charge"(arr), "delta_energy"(arr), 
+                          "solar_irradiances"(arr), "wind_speeds"(arr), "gis_route_elevations_at_each_tick"(arr), 
+                          "cloud_covers", "distance_travelled"(float), "time_taken"(int), "final_soc"(float)]
     
-    # run simulation 
+    Remember sim_results is a list not a dict, so parsing requires integer indexing and not using keys. Index order 
+    is the same order as the list above.
+
+    """
+    # Run Simulation
+    sim_results = run_unoptimized_and_export(granularity = sim_args_dict["granularity"], golang = sim_args_dict["golang"]);
+
+    # Parse Simulation results 
     distance_travelled = sim_results[8]
     time_taken = sim_results[9]
     final_soc = sim_results[10]
@@ -51,7 +56,7 @@ def run_sim_once(sim_args_dict):
     delta_energy = first_N_Elements(sim_results[3], 400)
     # influx_data = json.loads(influx_hd.get_SoC_data())
 
-    # Creating dictionary from SimulationResults
+    # Creating dictionary from Simulation Results
     data = {
         "distance_travelled": distance_travelled,
         "time_taken": time_taken,
@@ -64,6 +69,7 @@ def run_sim_once(sim_args_dict):
         # "GIS_coordinates": rawData[1],
     }
 
+    # Write results to data JSON file
     with open("data.json", "w") as outfile:
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
