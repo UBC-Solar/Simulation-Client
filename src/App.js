@@ -162,7 +162,6 @@ class App extends Component {
     this.setState({
       ExtraGraphs: typeof value === 'string' ? value.split(',') : value,
     });
-    console.log(typeof value === 'string' ? value.split(',') : value,);
   }
 
 
@@ -187,6 +186,7 @@ class App extends Component {
             json={this.state.json} 
             handleChange={this.handleChangeSelect}
             Select={this.state.ExtraGraphs}
+            ExtraGraphs={this.state.ExtraGraphs}
           />
         );
       } else {
