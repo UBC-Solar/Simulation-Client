@@ -11,11 +11,14 @@ export default function Graph(props) {
             values1.forEach((d) => {
                 const dataPoint = {
                     tick: tick++,
-                    value: d,
+                    speed: d,
                 }
                 data.push(dataPoint);
             });
             let values2 = props.data['state_of_charge'];
+            values2.forEach((p, index) => {
+                data[index].soc = p;
+            })
             console.log(data)
 
             // set the dimensions and margins of the graph
@@ -34,20 +37,30 @@ export default function Graph(props) {
                 .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
             // Add X axis and Y axis
-            var x1 = d3.scaleTime().range([0, width]);
+            var x1 = d3.scaleLinear().range([0, width]);
             var y1 = d3.scaleLinear().range([height, 0]);
             x1.domain(d3.extent(data, (d) => { return d.tick; }));
-            y1.domain([0, d3.max(data, (d) => { return d.value; })]);
+            y1.domain([0, d3.max(data, (d) => { return d.speed; })]);
             svg.append("g")
                 .attr("transform", `translate(0, ${height})`)
                 .call(d3.axisBottom(x1));
             svg.append("g")
                 .call(d3.axisLeft(y1));
+            
+            var y2 = d3.scaleLinear().range([height, 0]);
+            y2.domain([0, d3.max(data, (d) => { return d.soc; })]);
+            // Append the y2-axis to the far left and shift it over some distance
+            let YAxis2 = svg.append("g")
+                .attr("transform", `translate(-30, 0)`)  // Move to the left and shift it by 20 units
+                .call(d3.axisLeft(y2));
+
+            YAxis2.selectAll("text")
+                .style("fill", "#fcba03");
 
             // add the Line
             var valueLine = d3.line()
                 .x((d) => { return x1(d.tick); })
-                .y((d) => { return y1(d.value); });
+                .y((d) => { return y1(d.speed); });
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
