@@ -29,29 +29,39 @@ def first_N_Elements(arr, n):
     return arr2
 
 def run_sim_once(sim_args_dict):
+    # default_values = ["speed_kmh", "distances", "state_of_charge", "delta_energy", "solar_irradiances",
+    #                       "wind_speeds", "gis_route_elevations_at_each_tick", "cloud_covers",
+    #                       "distance_travelled", "time_taken", "final_soc"]
+
+
+    print("inside run sim once")
     sim_results = run_unoptimized_and_export();
-    with open("test.json", "w") as outfile:
-        json.dump(sim_results, outfile)
-    return # Temporary early return - skipping sim run
+
+    print("done running sim")
+    print(sim_results)
+    print(type(sim_results), len(sim_results))
+    
     # run simulation 
-    rawData = ex.GetSimulationData()
-    shorter_speed = first_N_Elements(rawData[0].arrays[0], 400)
-    shorter_distance = first_N_Elements(rawData[0].arrays[1], 400)
-    shorter_SOC = first_N_Elements(rawData[0].arrays[2], 400)
-    shorter_DE = first_N_Elements(rawData[0].arrays[3], 400)
-    influx_data = json.loads(influx_hd.get_SoC_data())
+    distance_travelled = sim_results[8]
+    time_taken = sim_results[9]
+    final_soc = sim_results[10]
+    speed = first_N_Elements(sim_results[0], 400)
+    distances = first_N_Elements(sim_results[1], 400)
+    state_of_charge = first_N_Elements(sim_results[2], 400)
+    delta_energy = first_N_Elements(sim_results[3], 400)
+    # influx_data = json.loads(influx_hd.get_SoC_data())
 
     # Creating dictionary from SimulationResults
     data = {
-        "distance_travelled": rawData[0].distance_travelled,
-        "time_taken": rawData[0].time_taken,
-        "final_soc": rawData[0].final_soc,
-        "speed_kmh": shorter_speed,
-        "distances": shorter_distance,
-        "state_of_charge": shorter_SOC,
-        "delta_energy": shorter_DE,
-        "influx_soc": influx_data,
-        "GIS_coordinates": rawData[1],
+        "distance_travelled": distance_travelled,
+        "time_taken": time_taken,
+        "final_soc": final_soc,
+        "speed_kmh": speed,
+        "distances": distances,
+        "state_of_charge": state_of_charge,
+        "delta_energy": delta_energy,
+        # "influx_soc": influx_data,
+        # "GIS_coordinates": rawData[1],
     }
 
     with open("data.json", "w") as outfile:
