@@ -105,7 +105,8 @@ class App extends Component {
   
   startSim = () => {
     console.log("RE-RUNNING SIMULATION")
-    window.port.postMessage('run_sim')
+    console.log(this.state.simArgs)
+    window.port.postMessage('run_sim' + ' ' + JSON.stringify(this.state.simArgs)) // send sim args as a json string as a part of the command
     this.setState({
       loading: true,
       displayMap: false,
@@ -136,8 +137,6 @@ class App extends Component {
     const telemetryData = JSON.parse(telemetryDataJSON);
     console.log(telemetryData);
   }
-
-
 
   handleChangeGo = (e, value) => {
     if(value) {
@@ -203,7 +202,7 @@ class App extends Component {
                 </ToggleButtonGroup>
                 {statProvider()}
             </Col>
-            <Col id="centerRow" xl={2}>
+            <Col id="centerRow" xl={2} style={{overflowX: 'auto'}}>
               <Button id="fireSimButton" onClick={this.startSim} variant="contained" size="large">Run Simulation</Button>
               <SimArgs 
                 mapGran={this.state.mapGranularity} 
@@ -216,7 +215,7 @@ class App extends Component {
                 }}
                 handleChanges={[this.handleChangeGo, this.handleChangeOptimize]}
               />
-                <ValueTable 
+                <ValueTable
                 currentValues={this.state.currentValues} 
                 expectedValues={this.state.expectedValues} 
                 sendMostRecentMessage={this.requestRecentValues} 

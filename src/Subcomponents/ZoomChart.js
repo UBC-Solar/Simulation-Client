@@ -1,13 +1,13 @@
 
 import React, { useState } from "react";
-import { LineChart, Line, ReferenceArea, XAxis, YAxis } from "recharts";
+import { LineChart, Line, ReferenceArea, XAxis, YAxis, Tooltip } from "recharts";
 
 import '../App.css';
 
 
 const MIN_ZOOM = 5; // adjust based on your data
 const DEFAULT_ZOOM = { x1: null, y1: null, x2: null, y2: null };
-const CHART_WIDTH = 400;
+const CHART_WIDTH = 380;
 
 
 const Normalize = (min, max, dataset) => {
@@ -96,6 +96,18 @@ export default function ZoomChart(props) {
     }
   }
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`(${Math.round(label * 100) / 100} , ${Math.round(payload[0].value * 100) / 100})`}</p> {/* (x, y) pair rounded to 2 decimal places */}
+        </div>
+      );
+    }
+  
+    return null;
+  };
+
   return (
     <div className="plot-container">
       <div>{props.name}</div>
@@ -112,6 +124,7 @@ export default function ZoomChart(props) {
           type="number"
           dataKey="x"
           domain={["auto", "auto"]}
+          tick={{fontSize: 13}}
           stroke="white"
         />
         <YAxis
@@ -119,6 +132,7 @@ export default function ZoomChart(props) {
           dataKey="y"
           domain={["auto", "auto"]}
           allowDecimals={true}
+          tick={{fontSize: 13}}
           stroke="white"
         />
         <Line 
@@ -126,6 +140,8 @@ export default function ZoomChart(props) {
             stroke="white"
             animationDuration={300}
         />
+
+        <Tooltip content={CustomTooltip}/>
 
       </LineChart>
     </div>
