@@ -44,12 +44,18 @@ def run_sim_once(sim_args_dict):
 
     """
     # Run Simulation
-    sim_results = run_unoptimized_and_export(granularity = sim_args_dict["granularity"], golang = sim_args_dict["golang"]);
+    sim_results = run_unoptimized_and_export(
+                        values = ["speed_kmh", "distances", "state_of_charge", "delta_energy", "solar_irradiances",
+                                "wind_speeds", "gis_route_elevations_at_each_tick", "cloud_covers",
+                                "distance_travelled", "time_taken", "final_soc", "path_coordinates"], 
+                        granularity = sim_args_dict["granularity"], 
+                        golang = sim_args_dict["golang"])
 
     # Parse Simulation results 
     distance_travelled = sim_results[8]
     time_taken = sim_results[9]
     final_soc = sim_results[10]
+    GIS_coordinates = sim_results[11]
     speed = first_N_Elements(sim_results[0], 400)
     distances = first_N_Elements(sim_results[1], 400)
     state_of_charge = first_N_Elements(sim_results[2], 400)
@@ -66,7 +72,7 @@ def run_sim_once(sim_args_dict):
         "state_of_charge": state_of_charge,
         "delta_energy": delta_energy,
         # "influx_soc": influx_data,
-        # "GIS_coordinates": rawData[1],
+        "GIS_coordinates": GIS_coordinates
     }
 
     # Write results to data JSON file
