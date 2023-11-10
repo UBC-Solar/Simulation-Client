@@ -125,6 +125,15 @@
   align-items: center;
 }
 
+.hover_tooltip {
+  position: absolute;
+  background-color: white;
+  color: black;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
+}
 
 /* Zoom Chart Styling */
 /* ----------------------------------- */

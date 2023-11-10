@@ -61,6 +61,7 @@ export default function Graph(props) {
             var valueLine = d3.line()
                 .x((d) => { return x1(d.tick); })
                 .y((d) => { return y1(d.speed); });
+                            
             svg.append("path")
                 .data([data])
                 .attr("class", "line")
@@ -68,6 +69,32 @@ export default function Graph(props) {
                 .attr("stroke", "steelblue")
                 .attr("stroke-width", 1.5)
                 .attr("d", valueLine)
+            
+            
+            // Define a tooltip element that will be shown on hover
+            const hover_tooltip = d3.select("body").append("div")
+            .attr("class", "hover_tooltip")
+            .style("opacity", 0);
+
+            // Add a transparent overlay to capture hover events
+            svg.append("rect")
+                .attr("width", width)
+                .attr("height", height)
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .on("mouseover", () => hover_tooltip.style("opacity", "1"))
+                .on("mouseout", () => hover_tooltip.style("opacity", "0"))
+                .on("mousemove", (event) => {
+                    // Calculate the corresponding data point based on the mouse position
+                    const xPosition = x1.invert(d3.pointer(event)[0]);
+                    const i = d3.bisectLeft(data.map(d => d.tick), xPosition, 1);
+                    const dataPoint = data[i - 1];
+
+                    // Show the tooltip with data
+                    hover_tooltip.html(`Tick: ${dataPoint.tick}<br>Speed: ${dataPoint.speed}<br>SoC: ${dataPoint.soc}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 30) + "px");
+            });
     }
 
     useEffect(() => {
