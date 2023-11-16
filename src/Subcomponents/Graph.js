@@ -71,7 +71,7 @@ export default function Graph(props) {
                 .attr("d", valueLine)
             
             
-            // Define a tooltip element that will be shown on hover
+            // Tooltip element that will be shown on hover
             const hover_tooltip = d3.select("body").append("div")
             .attr("class", "hover_tooltip")
             .style("opacity", 0);
@@ -82,16 +82,22 @@ export default function Graph(props) {
                 .attr("height", height)
                 .style("fill", "none")
                 .style("pointer-events", "all")
-                .on("mouseover", () => hover_tooltip.style("opacity", "1"))
-                .on("mouseout", () => hover_tooltip.style("opacity", "0"))
+                .on("mouseover", () => hover_tooltip.style("opacity", "1")) // show tooltip
+                .on("mouseout", () => hover_tooltip.style("opacity", "0")) // make tooltip invisible
                 .on("mousemove", (event) => {
                     // Calculate the corresponding data point based on the mouse position
                     const xPosition = x1.invert(d3.pointer(event)[0]);
                     const i = d3.bisectLeft(data.map(d => d.tick), xPosition, 1);
                     const dataPoint = data[i - 1];
+                    let tooltip_str = "";
+                    
+                    // Build tooltip string with data poitns rounded to 5 decimal places
+                    Object.keys(dataPoint).forEach((key) => {
+                        tooltip_str += key.charAt(0).toUpperCase() + key.slice(1) + " " + (Math.round(dataPoint[key] * 100000) / 100000) + "<br>";
+                    });
 
-                    // Show the tooltip with data
-                    hover_tooltip.html(`Tick: ${dataPoint.tick}<br>Speed: ${dataPoint.speed}<br>SoC: ${dataPoint.soc}`)
+                    // Update tooltip text and position
+                    hover_tooltip.html(tooltip_str)
                         .style("left", (event.pageX + 10) + "px")
                         .style("top", (event.pageY - 30) + "px");
             });
@@ -104,6 +110,6 @@ export default function Graph(props) {
             d3.select('#graphBox svg').remove();
           };
       }, []);
-      
+
     return(<></>);
 }
