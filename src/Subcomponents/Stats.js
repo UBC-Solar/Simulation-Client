@@ -24,7 +24,7 @@ class Stats extends Component {
                     return(
                         <div id="statDiv">
                             <div id="graphBox">
-                                <Graph data={this.props.json}/>
+                                <Graph data={this.props.json} graphs={this.props.ExtraGraphs}/>
                             </div>
 
                         </div>

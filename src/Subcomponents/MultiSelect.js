@@ -38,9 +38,10 @@ export default function MultiSelect(props) {
               label="Graph To Display"
               onChange={handleChange}
             >
-              <MenuItem value="SOC">State of Charge</MenuItem>
-              <MenuItem value="Speed">Speed</MenuItem>
-              <MenuItem value="Distances">Distances</MenuItem>
+              <MenuItem value="state_of_charge">State of Charge</MenuItem>
+              <MenuItem value="speed_kmh">Speed</MenuItem>
+              <MenuItem value="distances">Distances</MenuItem>
+              <MenuItem value="delta_energy">Delta Energy</MenuItem>
             </Select>
           </FormControl>
         </div>
