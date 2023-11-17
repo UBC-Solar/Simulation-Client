@@ -162,6 +162,7 @@ class App extends Component {
     this.setState({
       ExtraGraphs: typeof value === 'string' ? value.split(',') : value,
     });
+    
   }
 
 

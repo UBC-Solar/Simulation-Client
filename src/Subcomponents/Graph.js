@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useMemo, useState} from "react";
 export default function Graph(props) {
     const [graphList, setGraphList] = useState(props.graphs);
 
-    const createGraph = async () => {
+    const createGraph = () => {
         // data array will store datapoints for the selected graphs
         let data = [];
         let colors = ['#fcba03', "#9405fa", "#cc0808", "#3bc708"]
@@ -24,7 +24,7 @@ export default function Graph(props) {
 
         var leftMargin = props.graphs.length * 37.5;
         // set the dimensions and margins of the graph
-        var margin = { top: 20, right: 50, bottom: 50, left: leftMargin };
+        var margin = { top: 30, right: 50, bottom: 50, left: leftMargin };
 
         // Get the width of the "graphBox" div
         var graphBox = document.getElementById('graphBox');
@@ -55,7 +55,7 @@ export default function Graph(props) {
             y.domain([d3.min(data, (d) => {return d[dataName]}), d3.max(data, (d) => { return d[dataName]; })]);
             // Append the y2-axis to the far left and shift it over some distance
             let YAxis = svg.append("g")
-                .attr("transform", `translate(-${graphNumber * 37.5}, 0)`)  // Move to the left and shift it by 20 units
+                .attr("transform", `translate(-${graphNumber * 40}, 0)`)  // Move to the left and shift it by 20 units
                 .call(d3.axisLeft(y));
     
             YAxis.selectAll("text")
@@ -72,8 +72,27 @@ export default function Graph(props) {
                 .attr("stroke", color)
                 .attr("stroke-width", 1.5)
                 .attr("d", valueLine)
-            
-            graphNumber++;
+
+            svg.selectAll("mydots")
+                .data([data])
+                .enter()
+                .append("circle")
+                .attr("cx", d => 130 * graphNumber) // Adjust the x position to stack horizontally
+                .attr("cy", -20) // Keep the vertical position constant
+                .attr("r", 7)
+                .style("fill", color);
+            // Add one dot in the legend for each name.
+            svg.selectAll("mylabels")
+                .data([data])
+                .enter()
+                .append("text")
+                .attr("x", d => 130 * graphNumber + 13) // Adjust the x position to stack horizontally
+                .attr("y", -20) // Keep the vertical position constant
+                .style("fill", color)
+                .text(dataName)
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle");
+            graphNumber++;       
         })
 
         // Tooltip element that will be shown on hover
