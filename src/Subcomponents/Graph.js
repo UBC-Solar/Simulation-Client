@@ -14,7 +14,7 @@ export default function Graph(props) {
             data[tick] = {tick: tick}
         })
         
-        graphList.forEach((dataName) => {
+        props.graphs.forEach((dataName) => {
             let values1 = props.data[dataName];
             values1.forEach((d, index) => {
                 data[index][dataName] = d;
@@ -22,7 +22,7 @@ export default function Graph(props) {
         });
     
 
-        var leftMargin = graphList.length * 37.5;
+        var leftMargin = props.graphs.length * 37.5;
         // set the dimensions and margins of the graph
         var margin = { top: 20, right: 50, bottom: 50, left: leftMargin };
 
@@ -31,6 +31,9 @@ export default function Graph(props) {
         var width = graphBox.clientWidth - margin.left - margin.right;
         var height = graphBox.clientHeight - margin.top - margin.bottom;
 
+        // Clean up previous graph before creating a new one
+        d3.select('#graphBox svg').remove();
+        
         // append the svg object to the body of the page
         var svg = d3.select("#graphBox").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -46,7 +49,7 @@ export default function Graph(props) {
             .call(d3.axisBottom(x));
         
         let graphNumber = 0;
-        graphList.forEach((dataName) => {
+        props.graphs.forEach((dataName) => {
             var color = colors[graphNumber];
             var y = d3.scaleLinear().range([height, 0]);
             y.domain([d3.min(data, (d) => {return d[dataName]}), d3.max(data, (d) => { return d[dataName]; })]);
@@ -106,12 +109,10 @@ export default function Graph(props) {
     }
 
     useEffect(() => {
+        // Clean up previous graph before creating a new one
         createGraph();
-        return () => {
-            // Cleanup code to remove the SVG element
-            d3.select('#graphBox svg').remove();
-          };
-      }, []);
+
+    }, [props.graphs]);
 
     return(<></>);
 }
