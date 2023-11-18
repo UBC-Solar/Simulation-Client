@@ -242,8 +242,6 @@ export default function Graph(props) {
                 
             graphNumber++;       
         })
-
-
     }
 
     useEffect(() => {
