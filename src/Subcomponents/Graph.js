@@ -3,13 +3,16 @@ import React, {useEffect} from "react";
 
 export default function Graph(props) {
 
+    // TODO: Data tick values are not the corresponding simulation output ticks since simulation outputs have been shortened.
+    // TODO: Hunt down the ellusive bug. The hover functionality sometimes randomly disappears. Sometimes reappearing shortly
+    // and sometimes staying gone for good. This isn't a huge problem but one day should be fixed
+
     const createGraph = () => {
         // data array will store datapoints for the selected graphs
         let data = [];
         let colors = ['#fcba03', "#9405fa", "#cc0808", "#3bc708"]
 
         // initializing data array to have the correct size and a tick value at each point.
-        // TODO: Data tick values are not the corresponding simulation output ticks since simulation outputs have been shortened.
         props.data['speed_kmh'].forEach((value, tick) => {
             data[tick] = {tick: tick}
         })
@@ -133,12 +136,6 @@ export default function Graph(props) {
                         .x(function (d) { return x(d.tick); })
                         .y(function (d) { return yScale(d[dataName]); })
                     );
-                
-                // Update y-axis position for each line
-                svg.select(`.y-axis-${index + 1}`)
-                    .transition()
-                    .duration(1000)
-                    .call(d3.axisLeft(yScale));
             })
         }
 
