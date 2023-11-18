@@ -59,10 +59,36 @@ export default function Graph(props) {
         .attr("x", 0)
         .attr("y", 0);
 
+        /** Hover Functionality **/
+
         // Tooltip element that will be shown on hover
         const hover_tooltip = d3.select("body").append("div")
         .attr("class", "hover_tooltip")
         .style("opacity", 0);
+
+         // Define lines to create a crosshair that follows the mouse
+         const hoverLineVertical = svg.append("line")
+         .attr("class", "hover-line")
+         .style("stroke", "#666")
+         .style("stroke-width", "2px")
+         .style("stroke-dasharray", "3,3")
+         .attr("x1", 0)
+         .attr("x2", 0)
+         .attr("y1", 0)
+         .attr("y2", height)
+         .style("opacity", 0);
+
+     const hoverLineHorizontal = svg.append("line")
+         .attr("class", "hover-line")
+         .style("stroke", "#666")
+         .style("stroke-width", "2px")
+         .style("stroke-dasharray", "3,3")
+         .attr("x1", 0)
+         .attr("x2", width)
+         .attr("y1", 0)
+         .attr("y2", 0)
+         .style("opacity", 0);
+
 
         
         // Add brushing
@@ -108,25 +134,39 @@ export default function Graph(props) {
                 .attr("stroke", color)
                 .attr("stroke-width", 3)
                 .attr("d", valueLine)
+                .on("mouseover", () => {
+                    // show tooltip and horizontal line
+                    hover_tooltip.style("opacity", 1);
+                    hoverLineVertical.style("opacity", 1);
+                    hoverLineHorizontal.style("opacity", 1);
+                }) 
+                .on("mouseout", () => {
+                    // make tooltip and horizontal line invisible
+                    hover_tooltip.style("opacity", 0);
+                    hoverLineVertical.style("opacity", 0);
+                    hoverLineHorizontal.style("opacity", 0);
+                }) 
                 .on("mousemove", (event) => {
                     // Calculate the corresponding data point based on the mouse position
-                    const xPosition = x.invert(d3.pointer(event)[0]);
-                    const i = d3.bisectLeft(data.map(d => d.tick), xPosition, 1);
+                    const xPosition = d3.pointer(event)[0];
+                    const xPositionInverted = x.invert(xPosition);
+                    const i = d3.bisectLeft(data.map(d => d.tick), xPositionInverted, 1);
                     const dataPoint = data[i - 1];
+    
+                    // Update tooltip text and position
                     let tooltip_str = "";
-            
-                    // Build tooltip string with data points rounded to 5 decimal places
                     Object.keys(dataPoint).forEach((key) => {
                         tooltip_str += key + ": " + (Math.round(dataPoint[key] * 100000) / 100000) + "<br>";
                     });
-            
-                    // Update tooltip text and position
                     hover_tooltip.html(tooltip_str)
                         .style("left", (event.pageX + 10) + "px")
                         .style("top", (event.pageY - 30) + "px");
-                })
-                .on("mouseover", () => hover_tooltip.style("opacity", "1")) // show tooltip
-                .on("mouseout", () => hover_tooltip.style("opacity", "0")); // make tooltip invisible   
+    
+                    // Update crosshair position
+                    const yPosition = d3.pointer(event)[1]; 
+                    hoverLineHorizontal.attr("y1", yPosition).attr("y2", yPosition);
+                    hoverLineVertical.attr("x1", xPosition).attr("x2", xPosition);
+                });
             
 
             svg.selectAll("mydots")
@@ -151,70 +191,12 @@ export default function Graph(props) {
             graphNumber++;       
         })
 
-        // Define lines to create a crosshair that follows the mouse
-        const hoverLineVertical = svg.append("line")
-            .attr("class", "hover-line")
-            .style("stroke", "#666")
-            .style("stroke-width", "2px")
-            .style("stroke-dasharray", "3,3")
-            .attr("x1", 0)
-            .attr("x2", 0)
-            .attr("y1", 0)
-            .attr("y2", height)
-            .style("opacity", 0);
+       
 
-        const hoverLineHorizontal = svg.append("line")
-            .attr("class", "hover-line")
-            .style("stroke", "#666")
-            .style("stroke-width", "2px")
-            .style("stroke-dasharray", "3,3")
-            .attr("x1", 0)
-            .attr("x2", width)
-            .attr("y1", 0)
-            .attr("y2", 0)
-            .style("opacity", 0);
+        
 
-        // Add a transparent overlay to capture hover events
-        svg.append("rect")
-            .attr("width", width)
-            .attr("height", height)
-            .style("fill", "none")
-            .style("pointer-events", "all")
-            .on("mouseover", () => {
-                // show tooltip and horizontal line
-                hover_tooltip.style("opacity", 1);
-                hoverLineVertical.style("opacity", 1);
-                hoverLineHorizontal.style("opacity", 1);
-            }) 
-            .on("mouseout", () => {
-                // make tooltip and horizontal line invisible
-                hover_tooltip.style("opacity", 0);
-                hoverLineVertical.style("opacity", 0);
-                hoverLineHorizontal.style("opacity", 0);
-            }) 
-            .on("mousemove", (event) => {
-                // Calculate the corresponding data point based on the mouse position
-                const xPosition = d3.pointer(event)[0];
-                const xPositionInverted = x.invert(xPosition);
-                const i = d3.bisectLeft(data.map(d => d.tick), xPositionInverted, 1);
-                const dataPoint = data[i - 1];
+        /** Zoom Functionality **/
 
-                // Update tooltip text and position
-                let tooltip_str = "";
-                Object.keys(dataPoint).forEach((key) => {
-                    tooltip_str += key + ": " + (Math.round(dataPoint[key] * 100000) / 100000) + "<br>";
-                });
-                hover_tooltip.html(tooltip_str)
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 30) + "px");
-
-                // Update crosshair position
-                const yPosition = d3.pointer(event)[1]; 
-                hoverLineHorizontal.attr("y1", yPosition).attr("y2", yPosition);
-                hoverLineVertical.attr("x1", xPosition).attr("x2", xPosition);
-        });
-
-        // A function that set idleTimeOut to null
         var idleTimeout
         function idled() { idleTimeout = null; }
 
