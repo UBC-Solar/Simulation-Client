@@ -2,7 +2,6 @@ import * as d3 from "d3";
 import React, {useEffect, useRef, useMemo, useState} from "react";
 
 export default function Graph(props) {
-    const [graphList, setGraphList] = useState(props.graphs);
 
     const createGraph = () => {
         // data array will store datapoints for the selected graphs
@@ -44,40 +43,97 @@ export default function Graph(props) {
         
         var x = d3.scaleLinear().range([0, width]);
         x.domain(d3.extent(data, (d) => { return d.tick; }));
-        svg.append("g")
+        var xAxis = svg.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(d3.axisBottom(x));
+
         
+        
+
+        // Add a clipPath: everything out of this area won't be drawn.
+        var clip = svg.append("defs").append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("width", width )
+        .attr("height", height )
+        .attr("x", 0)
+        .attr("y", 0);
+
+        // Tooltip element that will be shown on hover
+        const hover_tooltip = d3.select("body").append("div")
+        .attr("class", "hover_tooltip")
+        .style("opacity", 0);
+
+        
+        // Add brushing
+        var brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .on("end", (event, d) => {updateChart(event, d)})               // Each time the brush selection changes, trigger the 'updateChart' function
+
+        // Create the line variable: where both the line and the brush take place
+        var line = svg.append('g')
+            .attr("clip-path", "url(#clip)")
+
+        // Add the brushing
+        line
+            .append("g")
+            .attr("class", "brush")
+            .call(brush);
+        
+        var y = d3.scaleLinear().range([height, 0]);
+
         let graphNumber = 0;
         props.graphs.forEach((dataName) => {
             var color = colors[graphNumber];
-            var y = d3.scaleLinear().range([height, 0]);
+            
             y.domain([d3.min(data, (d) => {return d[dataName]}), d3.max(data, (d) => { return d[dataName]; })]);
             // Append the y2-axis to the far left and shift it over some distance
-            let YAxis = svg.append("g")
+            var YAxis = svg.append("g")
                 .attr("transform", `translate(-${graphNumber * 40}, 0)`)  // Move to the left and shift it by 20 units
                 .call(d3.axisLeft(y));
     
             YAxis.selectAll("text")
                 .style("fill", color);
             
-                // add the Line
+            // add the Line
             var valueLine = d3.line()
                 .x((d) => { return x(d.tick); })
                 .y((d) => { return y(d[dataName]); });
-            svg.append("path")
+
+
+            line.append("path")
                 .data([data])
-                .attr("class", "line")
+                .attr("class", `line-${graphNumber+1}`)
                 .attr("fill", "none")
                 .attr("stroke", color)
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 3)
                 .attr("d", valueLine)
+                .on("mousemove", (event) => {
+                    // Calculate the corresponding data point based on the mouse position
+                    const xPosition = x.invert(d3.pointer(event)[0]);
+                    const i = d3.bisectLeft(data.map(d => d.tick), xPosition, 1);
+                    const dataPoint = data[i - 1];
+                    let tooltip_str = "";
+            
+                    // Build tooltip string with data points rounded to 5 decimal places
+                    Object.keys(dataPoint).forEach((key) => {
+                        tooltip_str += key + ": " + (Math.round(dataPoint[key] * 100000) / 100000) + "<br>";
+                    });
+            
+                    // Update tooltip text and position
+                    hover_tooltip.html(tooltip_str)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 30) + "px");
+                })
+                .on("mouseover", () => hover_tooltip.style("opacity", "1")) // show tooltip
+                .on("mouseout", () => hover_tooltip.style("opacity", "0")); // make tooltip invisible   
+            
 
             svg.selectAll("mydots")
                 .data([data])
                 .enter()
                 .append("circle")
-                .attr("cx", d => 130 * graphNumber) // Adjust the x position to stack horizontally
+                .attr("cx", d => 160 * graphNumber - (props.graphs.length * 40) + 40) // Adjust the x position to stack horizontally
                 .attr("cy", -20) // Keep the vertical position constant
                 .attr("r", 7)
                 .style("fill", color);
@@ -86,7 +142,7 @@ export default function Graph(props) {
                 .data([data])
                 .enter()
                 .append("text")
-                .attr("x", d => 130 * graphNumber + 13) // Adjust the x position to stack horizontally
+                .attr("x", d => 160 * graphNumber + 13 - (props.graphs.length * 40) + 40) // Adjust the x position to stack horizontally
                 .attr("y", -20) // Keep the vertical position constant
                 .style("fill", color)
                 .text(dataName)
@@ -94,11 +150,6 @@ export default function Graph(props) {
                 .style("alignment-baseline", "middle");
             graphNumber++;       
         })
-
-        // Tooltip element that will be shown on hover
-        const hover_tooltip = d3.select("body").append("div")
-        .attr("class", "hover_tooltip")
-        .style("opacity", 0);
 
         // Define lines to create a crosshair that follows the mouse
         const hoverLineVertical = svg.append("line")
@@ -162,6 +213,54 @@ export default function Graph(props) {
                 hoverLineHorizontal.attr("y1", yPosition).attr("y2", yPosition);
                 hoverLineVertical.attr("x1", xPosition).attr("x2", xPosition);
         });
+
+        // A function that set idleTimeOut to null
+        var idleTimeout
+        function idled() { idleTimeout = null; }
+
+        function updateChart(event, d) {
+            // What are the selected boundaries?
+            let extent = event.selection;
+        
+            let maxWidth = props.data["speed_kmh"].length;
+        
+            // If no selection, back to the initial coordinate. Otherwise, update X axis domain
+            if (!extent) {
+                if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows waiting a little bit
+                x.domain([0, maxWidth]);
+            } else {
+                x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+                line.select(".brush").call(brush.move, null); // This removes the grey brush area as soon as the selection has been done
+            }
+        
+            // Update axis and line position
+            xAxis.transition().duration(1000).call(d3.axisBottom(x));
+        
+            // Update each line separately
+            props.graphs.forEach((dataName, index) => {
+                let yScale = d3.scaleLinear().range([height, 0]); // Separate y-scale for each line
+
+                yScale.domain([d3.min(data, (d) => d[dataName]), d3.max(data, (d) => d[dataName])]);
+        
+                let lineSelection = line.select(`.line-${index + 1}`);
+                lineSelection
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .x(function (d) { return x(d.tick); })
+                        .y(function (d) { return yScale(d[dataName]); })
+                    );
+                
+                // Update y-axis position for each line
+                svg.select(`.y-axis-${index + 1}`)
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisLeft(yScale));
+            })
+        }
+
+
+
     }
 
     useEffect(() => {
