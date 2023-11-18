@@ -100,8 +100,8 @@ export default function Graph(props) {
         .attr("class", "hover_tooltip")
         .style("opacity", 0);
 
-        // Add a vertical line that follows the mouse
-        const hoverLine = svg.append("line")
+        // Define lines to create a crosshair that follows the mouse
+        const hoverLineVertical = svg.append("line")
             .attr("class", "hover-line")
             .style("stroke", "#666")
             .style("stroke-width", "2px")
@@ -112,6 +112,17 @@ export default function Graph(props) {
             .attr("y2", height)
             .style("opacity", 0);
 
+        const hoverLineHorizontal = svg.append("line")
+            .attr("class", "hover-line")
+            .style("stroke", "#666")
+            .style("stroke-width", "2px")
+            .style("stroke-dasharray", "3,3")
+            .attr("x1", 0)
+            .attr("x2", width)
+            .attr("y1", 0)
+            .attr("y2", 0)
+            .style("opacity", 0);
+
         // Add a transparent overlay to capture hover events
         svg.append("rect")
             .attr("width", width)
@@ -119,13 +130,17 @@ export default function Graph(props) {
             .style("fill", "none")
             .style("pointer-events", "all")
             .on("mouseover", () => {
+                // show tooltip and horizontal line
                 hover_tooltip.style("opacity", 1);
-                hoverLine.style("opacity", 1);
-            }) // show tooltip and horizontal line
+                hoverLineVertical.style("opacity", 1);
+                hoverLineHorizontal.style("opacity", 1);
+            }) 
             .on("mouseout", () => {
+                // make tooltip and horizontal line invisible
                 hover_tooltip.style("opacity", 0);
-                hoverLine.style("opacity", 0);
-            }) // make tooltip and horizontal line invisible
+                hoverLineVertical.style("opacity", 0);
+                hoverLineHorizontal.style("opacity", 0);
+            }) 
             .on("mousemove", (event) => {
                 // Calculate the corresponding data point based on the mouse position
                 const xPosition = d3.pointer(event)[0];
@@ -142,8 +157,10 @@ export default function Graph(props) {
                     .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY - 30) + "px");
 
-                // Update horizontal line position
-                hoverLine.attr("x1", xPosition).attr("x2", xPosition);
+                // Update crosshair position
+                const yPosition = d3.pointer(event)[1]; 
+                hoverLineHorizontal.attr("y1", yPosition).attr("y2", yPosition);
+                hoverLineVertical.attr("x1", xPosition).attr("x2", xPosition);
         });
     }
 
