@@ -142,7 +142,6 @@ export default function Graph(props) {
             })
         }
 
-
         // Add brushing
         var brush = d3.brushX()           
         .extent([[0,0], [width,height]])
