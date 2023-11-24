@@ -178,7 +178,7 @@ export default function Graph(props) {
                 .attr("class", `line-${graphNumber+1}`)
                 .attr("fill", "none")
                 .attr("stroke", color)
-                .attr("stroke-width", 4)    // change this to change thickness of graph lines
+                .attr("stroke-width", 2)    // change this to change thickness of graph lines
                 .attr("d", valueLine)
                 .on("mouseover", () => {
                     // show tooltip and horizontal line
@@ -243,6 +243,21 @@ export default function Graph(props) {
     useEffect(() => {
         // Clean up previous graph before creating a new one
         createGraph();
+        
+
+        // Listenser to remake/rerender the graph when the size of the window changes
+        // Add event listener for window resize
+        const handleResize = () => {
+            createGraph();
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+
     }, [props.graphs]);
 
     return(<></>);

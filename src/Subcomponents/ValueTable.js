@@ -12,7 +12,7 @@ class ValueTable extends Component {
     const { currentValues, expectedValues } = this.props;
 
     return (
-      <Container>
+      <Container id="valueTable">
         <Row>
           <Col>
             <Table striped bordered hover>

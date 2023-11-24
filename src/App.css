@@ -81,6 +81,10 @@
   border: 1px solid grey;
 }
 
+#valueTable {
+  margin-top: 20px;
+}
+
 
 /* Stat Bar Styles */
 /* ----------------------------------- */
