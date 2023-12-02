@@ -18,23 +18,25 @@
         shell = pyshell
         // Run the python script, send the results to the main renderer
         shell.on('message', function(results) {
-            console.log("Background renderer received the following from the pyshell:\n" + results);
-            window.port.postMessage({message: results})
+            console.log("Background renderer received the following from the pyshell:\n" + JSON.stringify(results));
+            window.port.postMessage(results)
         });
 
         shell.on('stderr', function(results) {
-            error_msg = "ERROR: Received the following error from the Python shell:\n" + results;
+            error_msg = "ERROR: Received the following error from the Python shell:\n" + JSON.stringify(results);
             console.log(error_msg);
             // todo: Do we need to send these errors through the port??
             window.port.postMessage({message: error_msg})
         });
 
         shell.on('error', function(results) {
+            console.log("Python-shell failed due to pythonError")
             // TODO: detemine how we handle this
             // Error is emitted when the shell cannot be spawned, killed, or a message cannot be sent
         })
 
         shell.on('pythonError', function(results) {
+            console.log("Python-shell failed due to pythonError")
             // TODO: detemine how we handle this
             // pythonError is emitted when the process terminates with a non-zero code
             // Could also more generally listen for the 'close' event which emits on close,

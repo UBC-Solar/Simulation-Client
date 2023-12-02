@@ -1,15 +1,28 @@
-import json
+import io
 import sys
+
+# Temporarily redirect stdout so that it doesn't print
+original_stdout = sys.stdout
+sys.stdout = io.StringIO()
+
+import json
+import threading
 from pathlib import Path
 import time
 import numpy as np
-import sys
 from simulation.run_simulation import run_unoptimized_and_export
-from db_interface import influxHandler
 from Influx_Query import telemetry_query
 
-print(sys.version)
-print(sys.executable)
+# Restore stdout
+sys.stdout = original_stdout
+
+TELEMETRY_POLLING_RATE = 3 # Rate in s to poll telemetry for new values
+
+def send_message(message):
+    print(json.dumps({"message": message}))
+
+send_message(sys.version)
+send_message(sys.executable)
 
 # numpy encoder
 class NpEncoder(json.JSONEncoder):
@@ -22,12 +35,13 @@ class NpEncoder(json.JSONEncoder):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
 
-influx_hd = influxHandler()
 influx_query = telemetry_query()
 
-# shortens arrays from simulation output  
-# must take elements from middle of array because otherwise values of interest area all zero
-def first_N_Elements(arr, n):
+send_message('message_test')
+
+def every_nth_element(arr, n):
+    """Shortens arrays from simulation output, must take elements from middle of array
+    because otherwise values of interest are all zero."""
     arr2 = arr[0::n].copy()
     return arr2
 
@@ -46,6 +60,8 @@ def run_sim_once(sim_args_dict):
     is the same order as the list above.
 
     """
+    test_dict = {"Testing": 1, "test_2": "string", "test_3": [1,2,"3"]}
+    return json.dumps(test_dict)
     # Run Simulation
     sim_results = run_unoptimized_and_export(
                         values = ["speed_kmh", "distances", "state_of_charge", "delta_energy", "solar_irradiances",
@@ -59,10 +75,10 @@ def run_sim_once(sim_args_dict):
     time_taken = sim_results[9]
     final_soc = sim_results[10]
     GIS_coordinates = sim_results[11]
-    speed = first_N_Elements(sim_results[0], 400)
-    distances = first_N_Elements(sim_results[1], 400)
-    state_of_charge = first_N_Elements(sim_results[2], 400)
-    delta_energy = first_N_Elements(sim_results[3], 400)
+    speed = every_nth_element(sim_results[0], 400)
+    distances = every_nth_element(sim_results[1], 400)
+    state_of_charge = every_nth_element(sim_results[2], 400)
+    delta_energy = every_nth_element(sim_results[3], 400)
     # influx_data = json.loads(influx_hd.get_SoC_data())
 
     # Creating dictionary from Simulation Results
@@ -78,39 +94,46 @@ def run_sim_once(sim_args_dict):
         "GIS_coordinates": GIS_coordinates
     }
 
+    return data
     # Write results to data JSON file
     with open("data.json", "w") as outfile:
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
 
-start_time = time.time()
+#def input_thread(input_queue: queue.Queue):
+    #while True:
+        #result = input()
+        #input_queue.put(result)
 
-while True:
-    current_time = time.time()
-    if current_time - start_time >= 3:
+#input_queue = queue.Queue()
+#threading.Thread(target=input_thread, args=(input_queue,), daemon=True)
+
+def poll_telemetry():
+    while True:
         results = influx_query.get_most_recent()
         file_path = Path(__file__).parent / '..' / 'src' / 'telemetry_data.json'
         with file_path.open('w') as f:
             json.dump(results, f, indent=2)
-        print("telemetry_data_queried")
-        start_time = current_time
+        send_message("telemetry_data_queried")
+        time.sleep(TELEMETRY_POLLING_RATE) # Poll telemetry every few seconds
 
+threading.Thread(target=poll_telemetry, daemon=True)
+
+poll_telemetry()
+
+while True:
     command = input()
-    # print(f"(Python Script): Received the following input from hidden renderer: {command}")
     if command.split(' ')[0] == 'run_sim': # expected: command = "run_sim" + " " + JSON String of SimArgs from front-end
         # TODO: May want to create a thread
         sim_args_dict = json.loads(command.split(' ')[1]) # Dictionary/JSON of simulation args recieved from front-end 
-        run_sim_once(sim_args_dict)
-        print("simulation_run_complete")
+        result = run_sim_once(sim_args_dict)
+        send_message(result)
+        send_message("simulation_run_complete")
+
     if command == 'get_most_recent':
         fields = ['vehicle_velocity', 'state_of_charge']
         results = influx_hd.get_most_recent(fields)
         file_path = Path(__file__).parent / '..' / 'most_recent_data.json'
         with file_path.open('w') as f:
             json.dump(results, f, indent=2)
-        print("most_recent_complete")
-
-    
-    
-    
-
+        send_message("most_recent_complete")
