@@ -17,6 +17,7 @@ from Influx_Query import telemetry_query
 sys.stdout = original_stdout
 
 TELEMETRY_POLLING_RATE = 3 # Rate in s to poll telemetry for new values
+sim_lock = threading.Lock() # Define a lock so we can only run the sim in one thread
 
 def send_message(message):
     print(json.dumps({"message": message}))
@@ -99,41 +100,40 @@ def run_sim_once(sim_args_dict):
     with open("data.json", "w") as outfile:
         json.dump(data, outfile, cls=NpEncoder, indent=2)
 
-
-#def input_thread(input_queue: queue.Queue):
-    #while True:
-        #result = input()
-        #input_queue.put(result)
-
-#input_queue = queue.Queue()
-#threading.Thread(target=input_thread, args=(input_queue,), daemon=True)
-
 def poll_telemetry():
     while True:
         results = influx_query.get_most_recent()
         file_path = Path(__file__).parent / '..' / 'src' / 'telemetry_data.json'
         with file_path.open('w') as f:
-            json.dump(results, f, indent=2)
+            json.dump(results, f, indent=2) # TODO: Update to returning json
         send_message("telemetry_data_queried")
         time.sleep(TELEMETRY_POLLING_RATE) # Poll telemetry every few seconds
 
-threading.Thread(target=poll_telemetry, daemon=True)
+threading.Thread(target=poll_telemetry, daemon=True).start()
 
-poll_telemetry()
-
-while True:
-    command = input()
+def handle_command(command):
     if command.split(' ')[0] == 'run_sim': # expected: command = "run_sim" + " " + JSON String of SimArgs from front-end
-        # TODO: May want to create a thread
-        sim_args_dict = json.loads(command.split(' ')[1]) # Dictionary/JSON of simulation args recieved from front-end 
-        result = run_sim_once(sim_args_dict)
-        send_message(result)
-        send_message("simulation_run_complete")
+        global sim_lock
+        if sim_lock.acquire(blocking=False):
+            try:
+                sim_args_dict = json.loads(command.split(' ')[1]) # Dictionary/JSON of simulation args recieved from front-end 
+                result = run_sim_once(sim_args_dict)
+                send_message(result)
+                send_message("simulation_run_complete")
+            finally:
+                sim_lock.release()
+        else:
+            send_message("Simulation is already running...")
 
     if command == 'get_most_recent':
         fields = ['vehicle_velocity', 'state_of_charge']
         results = influx_hd.get_most_recent(fields)
         file_path = Path(__file__).parent / '..' / 'most_recent_data.json'
         with file_path.open('w') as f:
-            json.dump(results, f, indent=2)
+            json.dump(results, f, indent=2) # TODO: Update to returning json
         send_message("most_recent_complete")
+
+
+while True:
+    command = input()
+    threading.Thread(target=handle_command, args=(command,)).start()
